@@ -12,6 +12,10 @@
   "author": "Andreas Hassellöf - Nordnet Bank AB",
   "license": "MIT",
   "dependencies": {
+    "async": "^1.4.0",
+    "crypto": "0.0.3",
+    "fs-extra": "^0.22.1",
+    "gulp-awspublish": "^2.0.2",
     "lodash": "^3.10.0",
     "optimist": "^0.6.1",
     "prompt": "^0.2.14",
