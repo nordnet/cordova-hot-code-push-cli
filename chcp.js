@@ -4,6 +4,7 @@ var path = require('path'),
 
 var cmd = argv._[0];
 switch(cmd) {
+  case 'login':
   case 'init':
     console.log('Running '+cmd);
     var command = require(path.join(__dirname,'lib',cmd+'.js'));
