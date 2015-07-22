@@ -20,6 +20,7 @@
     "optimist": "^0.6.1",
     "prompt": "^0.2.14",
     "q": "^1.4.1",
-    "recursive-readdir": "^1.2.1"
+    "recursive-readdir": "^1.2.1",
+    "s3": "^4.4.0"
   }
 }

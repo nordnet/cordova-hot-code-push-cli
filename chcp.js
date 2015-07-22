@@ -9,10 +9,16 @@ switch(cmd) {
   case 'init':
     console.log('Running '+cmd);
     var command = require(path.join(__dirname,'lib',cmd+'.js'));
+    command.execute(argv);
+    break;
+  case 'deploy':
+    var build = require(path.join(__dirname,'lib','build.js'));
+    build.execute(argv).then(function(){
+      var command = require(path.join(__dirname,'lib',cmd+'.js'));
+      command.execute(argv);
+    });
     break;
   default:
     console.log('Should print usage instructions.');
     process.exit(0);
 }
-
-command.execute(argv);
