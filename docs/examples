@@ -1,0 +1,38 @@
+1) {
+ native: {
+ ver: native_part_version_number (int),
+ store: http://url_to_app_store (string)
+ },
+ content: {
+ ver: html_content_version_number (int),
+ min_native_ver: minimum_version_of_the_native_part (int),
+ update: "on_start" or "on_resume" or "now",
+ content_url: http://url_where_manifest_and_contents_are_located (string)
+ }
+}
+
+Example:
+config.json?os=android
+{
+ native: {
+ ver: 2,
+ store: "market://details?id=com.nordnet.cool.app"
+ },
+ content: {
+ ver: 3,
+ min_native_ver: 1,
+ update: "on_start",
+ content_url: "http://myapp.com/ver2/"
+ }
+}
+
+2) manifest.json - should be in the root of config.content.content_url
+[
+{
+ file: relative_path_to_content_file (string),
+ hash: file_md5_hash (string)
+},...
+]
+
+Example:
+[{file: "index.html", hash:"slkjlkjfljsfkj"}, {file: "css/main.css", hash: "wejrowefh23"}]
