@@ -12,7 +12,9 @@
   "author": "Andreas Hassellöf - Nordnet Bank AB",
   "license": "MIT",
   "dependencies": {
+    "lodash": "^3.10.0",
     "optimist": "^0.6.1",
-    "prompt": "^0.2.14"
+    "prompt": "^0.2.14",
+    "q": "^1.4.1"
   }
 }
