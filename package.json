@@ -4,12 +4,12 @@
   "description": "Cordova Hot Code Push CLI",
   "preferGlobal": "true",
   "bin": {
-    "chcp": "chcp.js"
+    "cordova-hcp": "chcp.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Andreas Hassellöf - Nordnet Bank AB",
+  "author": "Andreas Hassellöf for Nordnet Bank AB",
   "license": "MIT",
   "dependencies": {
     "async": "^1.4.0",

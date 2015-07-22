@@ -12,18 +12,14 @@
 }
 
 Example:
-config.json?os=android
+config.json
 {
- native: {
- ver: 2,
- store: "market://details?id=com.nordnet.cool.app"
- },
- content: {
- ver: 3,
- min_native_ver: 1,
+ android_identifier: "com.nordnet.cool.app",
+ ios_identifier: "com.nordnet.cool.app",
+ version: 3,
+ min_native_interface: 1,
  update: "on_start",
  content_url: "http://myapp.com/ver2/"
- }
 }
 
 2) manifest.json - should be in the root of config.content.content_url
