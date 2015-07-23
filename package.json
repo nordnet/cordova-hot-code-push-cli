@@ -4,7 +4,7 @@
   "description": "Cordova Hot Code Push CLI",
   "preferGlobal": "true",
   "bin": {
-    "cordova-hcp": "chcp.js"
+    "cordova-hcp": "bin/cordova-hcp"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -13,8 +13,11 @@
   "license": "MIT",
   "dependencies": {
     "async": "^1.4.0",
+    "compression": "^1.5.1",
     "crypto": "0.0.3",
+    "express": "^4.13.1",
     "fs-extra": "^0.22.1",
+    "localtunnel": "^1.7.0",
     "lodash": "^3.10.0",
     "optimist": "^0.6.1",
     "prompt": "^0.2.14",
