@@ -7,19 +7,11 @@ switch(cmd) {
   case 'build':
   case 'login':
   case 'init':
+  case 'server':
+  case 'deploy':
     console.log('Running '+cmd);
     var command = require(path.resolve(__dirname,'..', 'lib',cmd+'.js'));
     command.execute(argv);
-    break;
-  case 'server':
-  case 'deploy':
-    console.log('Running build');
-    var build = require(path.resolve(__dirname,'..', 'lib','build.js'));
-    build.execute(argv).then(function(){
-      console.log('Running '+cmd);
-      var command = require(path.resolve(__dirname,'..', 'lib',cmd+'.js'));
-      command.execute(argv);
-    });
     break;
   default:
     console.log('TODO: Should print usage instructions.');
