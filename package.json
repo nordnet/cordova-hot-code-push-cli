@@ -6,6 +6,9 @@
   "bin": {
     "cordova-hcp": "bin/cordova-hcp"
   },
+  "engines" : {
+    "node" : ">=0.10.3 <0.12"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
