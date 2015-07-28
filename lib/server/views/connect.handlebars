@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
 
-  <title>The HTML5 Herald</title>
+  <title>Cordova Hot Code Push</title>
   <meta name="description" content="The HTML5 Herald">
   <meta name="author" content="SitePoint">
   <script src="/connect/assets/jquery.min.js"></script>
@@ -18,6 +18,10 @@
   <h1>Cordova Hot Code Push</h1>
   Local URL: <a href="{{localUrl}}" target="_blank">{{localUrl}}</a><br>
   Public URL: <a href="{{publicUrl}}" target="_blank">{{publicUrl}}</a><br>
+  {{#if consoleUrl}}
+    <br>
+    Debug Console: <a href="{{consoleUrl}}" target="_blank">{{consoleUrl}}</a><br>
+  {{/if}}
   <br><br><br>
   <h4>Scan in app:</h4>
   <div id="qrcode"></div>
