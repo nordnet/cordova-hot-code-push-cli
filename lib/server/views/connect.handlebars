@@ -16,18 +16,18 @@
 <body>
 
   <h1>Cordova Hot Code Push</h1>
-  Local URL: <a href="{{localUrl}}" target="_blank">{{localUrl}}</a><br>
-  Public URL: <a href="{{publicUrl}}" target="_blank">{{publicUrl}}</a><br>
-  {{#if consoleUrl}}
+  Local Config: <a href="{{localUrl}}" target="_blank">{{local_url}}</a><br>
+  Public Config: <a href="{{publicUrl}}" target="_blank">{{content_url}}</a><br>
+  {{#if console_url}}
     <br>
-    Debug Console: <a href="{{consoleUrl}}" target="_blank">{{consoleUrl}}</a><br>
+    Debug Console: <a href="{{consoleUrl}}" target="_blank">{{console_url}}</a><br>
   {{/if}}
   <br><br><br>
   <h4>Scan in app:</h4>
   <div id="qrcode"></div>
 
   <script type="text/javascript">
-    new QRCode(document.getElementById("qrcode"), "{{publicUrl}}");
+    new QRCode(document.getElementById("qrcode"), "{{content_url}}");
   </script>
 
 </body>
