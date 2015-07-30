@@ -6,8 +6,8 @@
   "bin": {
     "cordova-hcp": "bin/cordova-hcp"
   },
-  "engines" : {
-    "node" : ">=0.10.3 <0.12"
+  "engines": {
+    "node": ">=0.10.3 <0.12"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -29,6 +29,7 @@
     "optimist": "^0.6.1",
     "prompt": "^0.2.14",
     "q": "^1.4.1",
+    "random-string": "^0.1.2",
     "recursive-readdir": "^1.2.1",
     "s3": "^4.4.0",
     "socket.io": "^1.3.6",
