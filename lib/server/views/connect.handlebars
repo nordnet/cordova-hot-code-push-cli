@@ -16,8 +16,8 @@
 <body>
 
   <h1>Cordova Hot Code Push</h1>
-  Local Config: <a href="{{localUrl}}" target="_blank">{{local_url}}</a><br>
-  Public Config: <a href="{{publicUrl}}" target="_blank">{{content_url}}</a><br>
+  Local Config: <a href="{{localUrl}}" target="_blank">{{local_url}}/chcp.json</a><br>
+  Public Config: <a href="{{publicUrl}}" target="_blank">{{content_url}}/chcp.json</a><br>
   {{#if console_url}}
     <br>
     Debug Console: <a href="{{consoleUrl}}" target="_blank">{{console_url}}</a><br>
@@ -27,7 +27,7 @@
   <div id="qrcode"></div>
 
   <script type="text/javascript">
-    new QRCode(document.getElementById("qrcode"), "{{content_url}}");
+    new QRCode(document.getElementById("qrcode"), "{{content_url}}/chcp.json");
   </script>
 
 </body>
