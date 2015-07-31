@@ -19,34 +19,18 @@
       open = require('open'),
       remoteDebug = false,//!(argv.nodebug), // remoteDebug broken. socket.io conflict. Will fix later
       io,
-      opts = {},
-      localEnv  = getLocalEnv();
+      opts = {};
 
   module.exports = {
     execute: execute
   };
 
-  function getLocalEnv() {
-    var localEnv,
-        randomString = require('random-string');
+  function updateLocalEnv(localEnv) {
+    localEnv.config_url = localEnv.content_url + '/chcp.json';
 
-    try {
+    var json = JSON.stringify(localEnv, null, 2);
+    fs.writeFileSync(envFile, json);
 
-      localEnv = fs.readFileSync(envFile, {encoding: 'utf-8'});
-      localEnv = JSON.parse(localEnv);
-      console.log('localEnv', localEnv);
-    } catch(e) {
-      localEnv = {
-        content_subdomain: randomString({length: 20, numeric: false}).toLowerCase(),
-        debug_subdomain: randomString({length: 20, numeric: false}).toLowerCase()
-      };
-
-      localEnv.config_url = 'https://'+localEnv.content_subdomain+'.localtunnel.me/chcp.json';
-
-      var json = JSON.stringify(localEnv, null, 2);
-
-      fs.writeFileSync(envFile, json);
-    }
     return localEnv;
   }
 
@@ -56,7 +40,7 @@
     var funcs = [];
 
     funcs.push(function(){
-      return publicTunnel(assetPort, {subdomain: localEnv.content_subdomain});
+      return publicTunnel(assetPort);
     });
 
     funcs.push(function(content_url) {
@@ -92,6 +76,7 @@
       if(opts.debug_url) {
         opts.snippet += '\n<script src="' + opts.debug_url + '/target/target-script-min.js"></script>';
       }
+
       return build(opts);
     });
 
@@ -210,21 +195,20 @@
 
   function publicTunnel(port, options){
     var publicTunnelDfd = Q.defer(),
-        localtunnel = require('localtunnel');
+        ngrok = require('ngrok');
 
     // And make it accessible from the internet
-    var tunnel = localtunnel(port, options, function(err, tunnel) {
+    ngrok.connect(port, function (err, url) {
       if (err) {
         publicTunnelDfd.reject(err);
-        return console.log('Could not create localtunnel: ', err);
+        return console.log('Could not create tunnel: ', err);
       }
 
-      publicTunnelDfd.resolve(tunnel.url);
+      updateLocalEnv({content_url: url});
+
+      publicTunnelDfd.resolve(url);
     });
 
-    tunnel.on('close', function() {
-        console.log('Localtunnel closed, port: ', port);
-    });
 
     return publicTunnelDfd.promise;
   }
