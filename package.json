@@ -25,6 +25,7 @@
     "ios-webkit-debug-proxy": "0.0.3",
     "localtunnel": "^1.7.0",
     "lodash": "^3.10.0",
+    "ngrok": "^0.1.99",
     "open": "0.0.5",
     "optimist": "^0.6.1",
     "prompt": "^0.2.14",
