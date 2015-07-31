@@ -1,6 +1,6 @@
 #! /usr/bin/env node
 var path = require('path'),
-    argv = require('optimist').argv;
+    argv = require('yargs').argv;
 
 var cmd = argv._[0];
 switch(cmd) {
@@ -9,8 +9,8 @@ switch(cmd) {
   case 'init':
   case 'server':
   case 'deploy':
-    console.log('Running '+cmd);
-    var command = require(path.resolve(__dirname,'..', 'lib',cmd+'.js'));
+    console.log('Running ' + cmd);
+    var command = require(path.resolve(__dirname, '..', 'dist', cmd + '.js'));
     command.execute(argv);
     break;
   default:

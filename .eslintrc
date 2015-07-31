@@ -1,0 +1,17 @@
+{
+  "extends": "airbnb",
+  "env": {
+    "browser": true,
+    "mocha": true,
+    "node": true,
+    "es6": true
+  },
+  "globals": {
+    "sinon": true
+  },
+  "rules": {
+    "no-use-before-define": [2, "nofunc"],
+    "comma-dangle": [2, "always-multiline"],
+    "block-scoped-var": 0 // TEMPORARY until issue in ESLint is fixed
+  }
+}
