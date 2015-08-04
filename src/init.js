@@ -4,8 +4,9 @@ es6promise.polyfill();
 
 import path from 'path';
 import prompt from 'prompt';
-import fs from 'fs';
 import _ from 'lodash';
+
+import { getInput, writeFile } from './utils';
 
 const configFile = path.join(process.cwd(), 'chcp.json');
 
@@ -76,17 +77,13 @@ export function execute(argv) {
 
   let result;
 
-  getInput(schema)
+  getInput(prompt, schema)
     .then(validateBucket)
     .then(res => result = res)
     .then(getUrl)
     .then(url => _.assign(result, url))
-    .then(content => writeFile(content))
+    .then(content => writeFile(configFile, content))
     .then(done);
-}
-
-function getInput(props) {
-  return new Promise(resolve => prompt.get(props, (err, result) => resolve(result, err)));
 }
 
 function validateBucket(result) {
@@ -108,10 +105,6 @@ function getUrl({ s3region: region, s3bucket: bucket }) {
 function getContentUrl(region, bucket) {
   const url = region === 'us-east-1' ? 's3.amazonaws.com' : `s3-${region}.amazonaws.com`;
   return `https://${url}/${bucket}`;
-}
-
-function writeFile(content) {
-  return new Promise(resolve => fs.writeFile(configFile, JSON.stringify(content, null, 2), err => resolve(err)));
 }
 
 function done(err) {
