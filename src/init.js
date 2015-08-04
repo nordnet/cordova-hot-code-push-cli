@@ -96,7 +96,7 @@ function validateBucket(result) {
 
 function getUrl({ s3region: region, s3bucket: bucket }) {
   if (!bucket) {
-    return getInput(urlSchema);
+    return getInput(prompt, urlSchema);
   }
 
   return { content_url: getContentUrl(region, bucket) };
