@@ -106,9 +106,9 @@
     // Ignore changes in all files and folder containing .chcp
     // This excludes changes in build directory
     return (
-      file.indexOf('.chcp') === -1 &&
-      file !== 'chcp.json' &&
-      file !== 'chcp.manifest'
+      file.indexOf('.chcp') !== -1 ||
+      file === 'chcp.json' ||
+      file === 'chcp.manifest'
     );
   }
 
@@ -184,10 +184,42 @@
     // Static assets
     app.use(compression());
     app.enable('view cache');
-    function remove (req, res, next) {
+    function removeContentPolicy (req, res, next) {
+      if(!(req.originalUrl === '/' || _.endsWith(req.originalUrl, '.html'))) {
+        return next();
+      }
 
+      var oldWrite = res.write,
+          oldEnd = res.end,
+          contentLength = 0,
+          chunks = [];
+
+      res.write = function (buffer) {
+        //chunks.push(chunk);
+        var string = buffer.toString('utf8');
+        string = string.replace(/Content-Security-Policy/gi, 'DEACTIVATED-FOR-LOCAL-DEVELOPMENT-Content-Security-Policy');
+
+        contentLength += Buffer.byteLength(string, ['utf8']);
+
+        chunks.push(new Buffer(string, 'utf8'));
+      };
+
+      res.end = function (buffer) {
+        if (buffer)
+          chunks.push(buffer);
+
+        res.setHeader('Content-Length', contentLength);
+
+        _.each(chunks, function(buffer){
+          oldWrite.apply(res, [buffer]);
+        });
+
+        oldEnd.apply(res, arguments);
+      };
+
+      return next();
     }
-    app.use('/', express.static(sourceDirectory, { maxAge: 0 }));
+    app.use('/', removeContentPolicy, express.static(sourceDirectory, { maxAge: 0 }));
   }
 
   function killCaches(ass) {
