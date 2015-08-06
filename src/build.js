@@ -10,7 +10,7 @@
       createHash = require('crypto').createHash,
       recursive = require('recursive-readdir');
 
-  var configFile = path.join(process.cwd(), 'chcp.json');
+  var configFile = path.join(process.cwd(), 'cordova-hcp.json');
   var ignoreFile = path.join(process.cwd(), '.chcpignore');
 
   module.exports = {
@@ -23,7 +23,6 @@
         projectIgnore = '',
         sourceDirectory = path.join(process.cwd(), 'www'),
         ignore = [
-          'node_modules',
           'chcp.json',
           '.chcp*',
           '.gitignore',
@@ -44,7 +43,7 @@
       }
       console.log('Config', config);
     } catch(e) {
-      console.log('Cannot parse chcp.json. Did you run cordova-hcp init?');
+      console.log('Cannot parse cordova-hcp.json. Did you run cordova-hcp init?');
       process.exit(0);
     }
 

@@ -8,7 +8,7 @@ import _ from 'lodash';
 
 import { getInput, writeFile } from './utils';
 
-const configFile = path.join(process.cwd(), 'chcp.json');
+const configFile = path.join(process.cwd(), 'cordova-hcp.json');
 
 const name = {
   description: 'Enter project name (required)',

@@ -8,7 +8,7 @@
       _ = require('lodash'),
       s3 = require('s3');
 
-  var configFile = path.join(process.cwd(), 'chcp.json');
+  var configFile = path.join(process.cwd(), 'cordova-hcp.json');
   var ignoreFile = path.join(process.cwd(), '.chcpignore');
   var loginFile = path.join(process.cwd(), '.chcplogin');
 
@@ -32,13 +32,14 @@
     var executeDfd = Q.defer(),
         config,
         credentials,
-        destinationDirectory = path.join(process.cwd(), '.chcpbuild');
+        sourceDirectory = path.join(process.cwd(), 'www');
 
     try {
       config = fs.readFileSync(configFile, {encoding: 'utf-8'});
       config = JSON.parse(config);
     } catch(e) {
-      console.log('Cannot parse chcp.json: ', e);
+      console.log('Cannot parse cordova-hcp.json. Did you run cordova-hcp init?');
+      process.exit(0);
     }
     if(!config) {
       console.log('You need to run "cordova-hcp init" before you can run "cordova-hcp login".');
@@ -72,7 +73,7 @@
       },
     });
     var params = {
-      localDir: destinationDirectory,
+      localDir: sourceDirectory,
       deleteRemoved: true,
       s3Params: {
         Bucket: config.s3bucket,

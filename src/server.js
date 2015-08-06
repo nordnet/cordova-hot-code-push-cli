@@ -1,13 +1,13 @@
 (function(){
   var path = require('path'),
-      configFile = path.join(process.cwd(), 'chcp.json'),
+      configFile = path.join(process.cwd(), 'cordova-hcp.json'),
       ignoreFile = path.join(process.cwd(), '.chcpignore'),
       envFile = path.join(process.cwd(), '.chcpenv'),
       // argv = require('optimist').argv,
       Q = require('q'),
       _ = require('lodash'),
       fs = require("fs"),
-      destinationDirectory = path.join(process.cwd(), '.chcpbuild'),
+      sourceDirectory = path.join(process.cwd(), 'www'),
       watch = require('watch'),
       express = require('express'),
       exphbs  = require('express-handlebars'),
@@ -181,7 +181,7 @@
     app.use(compression());
     app.enable('view cache');
 
-    app.use('/', express.static(destinationDirectory, { maxAge: 0 }));
+    app.use('/', express.static(sourceDirectory, { maxAge: 0 }));
   }
 
   function killCaches(ass) {

@@ -4,7 +4,7 @@ import fs from 'fs';
 
 import { getInput, writeFile } from './utils';
 
-const configFile = path.join(process.cwd(), 'chcp.json');
+const configFile = path.join(process.cwd(), 'cordova-hcp.json');
 const loginFile = path.join(process.cwd(), '.chcplogin');
 
 const schema = {
@@ -41,7 +41,8 @@ function validateConfig() {
   try {
     config = fs.readFileSync(configFile);
   } catch(e) {
-    console.log('Cannot parse chcp.json');
+    console.log('Cannot parse cordova-hcp.json. Did you run cordova-hcp init?');
+    process.exit(0);
   }
 
   if (!config) {
