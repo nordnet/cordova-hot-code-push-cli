@@ -105,7 +105,11 @@
   function fileChangeFilter(file) {
     // Ignore changes in all files and folder containing .chcp
     // This excludes changes in build directory
-    return (file.indexOf('.chcp') === -1);
+    return (
+      file.indexOf('.chcp') === -1 &&
+      file !== 'chcp.json' &&
+      file !== 'chcp.manifest'
+    );
   }
 
   function assetServer(opts) {
@@ -180,7 +184,9 @@
     // Static assets
     app.use(compression());
     app.enable('view cache');
+    function remove (req, res, next) {
 
+    }
     app.use('/', express.static(sourceDirectory, { maxAge: 0 }));
   }
 
