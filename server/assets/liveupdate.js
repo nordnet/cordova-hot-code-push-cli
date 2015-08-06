@@ -1,8 +1,6 @@
 (function(){
-var mio = window.io; // Moving it to private namespace
-delete window.io;
-
-document.addEventListener("DOMContentLoaded", function(event) {
+  var mio = window.io; // Moving it to private namespace
+  delete window.io;
   var socket = mio.connect(window.chcpDevServer);
   console.log('Mio: ', mio);
   socket.on('release', function(data){
@@ -19,5 +17,4 @@ document.addEventListener("DOMContentLoaded", function(event) {
       });
     });
   });
-});
 })();
