@@ -3,7 +3,7 @@
       configFile = path.join(process.cwd(), 'chcp.json'),
       ignoreFile = path.join(process.cwd(), '.chcpignore'),
       envFile = path.join(process.cwd(), '.chcpenv'),
-      argv = require('optimist').argv,
+      // argv = require('optimist').argv,
       Q = require('q'),
       _ = require('lodash'),
       fs = require("fs"),

@@ -1,7 +1,7 @@
 (function(){
   var path = require('path'),
       prompt = require('prompt'),
-      argv = require('optimist').argv,
+      // argv = require('optimist').argv,
       build = require('./build.js').execute,
       fs = require('fs'),
       Q = require('q'),
