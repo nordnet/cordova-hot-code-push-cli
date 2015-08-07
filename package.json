@@ -27,7 +27,6 @@
     "express-handlebars": "^2.0.1",
     "fs-extra": "^0.22.1",
     "ios-webkit-debug-proxy": "0.0.3",
-    "localtunnel": "^1.7.0",
     "lodash": "^3.10.0",
     "ngrok": "^0.1.99",
     "open": "0.0.5",

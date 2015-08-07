@@ -105,10 +105,10 @@
   function fileChangeFilter(file) {
     // Ignore changes in all files and folder containing .chcp
     // This excludes changes in build directory
-    return (
+    return !(
       file.indexOf('.chcp') !== -1 ||
-      file === 'chcp.json' ||
-      file === 'chcp.manifest'
+      file.indexOf('chcp.json') !== -1 ||
+      file.indexOf('chcp.manifest') !== -1
     );
   }
 
@@ -135,7 +135,9 @@
 
   function watchForFileChange(){
     // Monitor for file changes
-    watch.watchTree(process.cwd(), {filter: fileChangeFilter}, function (f, curr, prev) {
+    var dir = path.join(process.cwd(), 'www');
+    console.log('Checking: ', dir);
+    watch.watchTree(dir, {filter: fileChangeFilter}, function (f, curr, prev) {
       if (typeof f == "object" && prev === null && curr === null) {
         // Finished walking the tree
         // console.log('Finished');
