@@ -8,6 +8,7 @@
       _ = require('lodash'),
       fs = require("fs"),
       sourceDirectory = path.join(process.cwd(), 'www'),
+      buildDirectory = path.join(process.cwd(), '.chcpbuild'),
       watch = require('watch'),
       express = require('express'),
       exphbs  = require('express-handlebars'),
@@ -135,9 +136,8 @@
 
   function watchForFileChange(){
     // Monitor for file changes
-    var dir = path.join(process.cwd(), 'www');
-    console.log('Checking: ', dir);
-    watch.watchTree(dir, {filter: fileChangeFilter}, function (f, curr, prev) {
+    console.log('Checking: ', sourceDirectory);
+    watch.watchTree(sourceDirectory, {filter: fileChangeFilter}, function (f, curr, prev) {
       if (typeof f == "object" && prev === null && curr === null) {
         // Finished walking the tree
         // console.log('Finished');
@@ -186,42 +186,7 @@
     // Static assets
     app.use(compression());
     app.enable('view cache');
-    function removeContentPolicy (req, res, next) {
-      if(!(req.originalUrl === '/' || _.endsWith(req.originalUrl, '.html'))) {
-        return next();
-      }
-
-      var oldWrite = res.write,
-          oldEnd = res.end,
-          contentLength = 0,
-          chunks = [];
-
-      res.write = function (buffer) {
-        //chunks.push(chunk);
-        var string = buffer.toString('utf8');
-        string = string.replace(/Content-Security-Policy/gi, 'DEACTIVATED-FOR-LOCAL-DEVELOPMENT-Content-Security-Policy');
-
-        contentLength += Buffer.byteLength(string, ['utf8']);
-
-        chunks.push(new Buffer(string, 'utf8'));
-      };
-
-      res.end = function (buffer) {
-        if (buffer)
-          chunks.push(buffer);
-
-        res.setHeader('Content-Length', contentLength);
-
-        _.each(chunks, function(buffer){
-          oldWrite.apply(res, [buffer]);
-        });
-
-        oldEnd.apply(res, arguments);
-      };
-
-      return next();
-    }
-    app.use('/', removeContentPolicy, express.static(sourceDirectory, { maxAge: 0 }));
+    app.use('/', express.static(buildDirectory, { maxAge: 0 }));
   }
 
   function killCaches(ass) {

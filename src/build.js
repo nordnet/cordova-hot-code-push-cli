@@ -8,10 +8,10 @@
       _ = require('lodash'),
       replaceStream = require('replacestream'),
       createHash = require('crypto').createHash,
-      recursive = require('recursive-readdir');
-
-  var configFile = path.join(process.cwd(), 'cordova-hcp.json');
-  var ignoreFile = path.join(process.cwd(), '.chcpignore');
+      recursive = require('recursive-readdir'),
+      sourceDirectory = path.join(process.cwd(), 'www'),
+      configFile = path.join(process.cwd(), 'cordova-hcp.json'),
+      ignoreFile = path.join(process.cwd(), '.chcpignore');
 
   module.exports = {
     execute: execute
@@ -20,9 +20,10 @@
   function execute(argv) {
     var executeDfd = Q.defer(),
         config,
+        destinationDirectory = path.join(process.cwd(), '.chcpbuild'),
         projectIgnore = '',
-        sourceDirectory = path.join(process.cwd(), 'www'),
         ignore = [
+          'node_modules',
           'chcp.json',
           '.chcp*',
           '.gitignore',
@@ -57,16 +58,19 @@
       _.assign(ignore, _.trim(projectIgnore).split(/\n/));
     }
 
+    fs.removeSync(destinationDirectory);
+
     recursive(sourceDirectory, ignore, function (err, files) {
       var hashQueue = [];
       for(var i in files) {
         var file = files[i];
-        hashQueue.push(hashFile.bind(null, file, sourceDirectory));
+        var dest = file.replace(sourceDirectory, destinationDirectory);
+        hashQueue.push(hashFile.bind(null, file, dest, argv.snippet));
       }
 
       async.parallelLimit(hashQueue, 10, function(err, result) {
         var json = JSON.stringify(result, null, 2);
-        var manifestFile = sourceDirectory + '/chcp.manifest';
+        var manifestFile = destinationDirectory + '/chcp.manifest';
 
         fs.writeFile(manifestFile, json, function(err) {
           if(err) {
@@ -74,11 +78,11 @@
           }
 
           var json = JSON.stringify(config, null, 2);
-          fs.writeFile(sourceDirectory + '/chcp.json', json, function(err) {
+          fs.writeFile(destinationDirectory + '/chcp.json', json, function(err) {
             if(err) {
               return console.log(err);
             }
-            console.log('Build '+config.release+' created in '+sourceDirectory);
+            console.log('Build '+config.release+' created in '+destinationDirectory);
             executeDfd.resolve(config);
           });
         });
@@ -88,10 +92,24 @@
     return executeDfd.promise;
   }
 
-  function hashFile(filename, sourceDirectory, callback){
+  function hashFile(filename, dest, snippet, callback){
     var hash = crypto.createHash('md5'),
         stream = fs.createReadStream(filename);
 
+    // Canot create writeStream before destination directory exists
+    fs.mkdirsSync(path.dirname(dest));
+    var writeStream = fs.createWriteStream(dest);
+
+    writeStream.on('error', function (err) {
+      console.log(err);
+    });
+
+    if(typeof snippet !== 'undefined' && _.endsWith(filename, '.html')) {
+      stream = stream.pipe(replaceStream( /<\/body>/i, snippet+'\n</body>'));
+    }
+    stream = stream.pipe(replaceStream( /Content-Security-Policy/gi, 'DISABLED-FOR-LOCAL-DEVELOPMENT-Content-Security-Policy'));
+    stream.pipe(writeStream);
+    //console.log('Hashing: ', filename);
     stream.on('data', function (data) {
       hash.update(data, 'utf8');
     });
