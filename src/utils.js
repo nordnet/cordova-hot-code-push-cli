@@ -5,5 +5,14 @@ export function getInput(prompt, props) {
 }
 
 export function writeFile(file, content) {
-  return new Promise(resolve => fs.writeFile(file, JSON.stringify(content, null, 2), err => resolve(err)));
+  return new Promise((resolve, reject) => {
+    var data = JSON.stringify(content, null, 2);
+    fs.writeFile(file, data, (err) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
 }
