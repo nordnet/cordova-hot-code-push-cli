@@ -20,7 +20,6 @@
   function execute(argv) {
     var executeDfd = Q.defer(),
         config,
-        destinationDirectory = path.join(process.cwd(), '.chcpbuild'),
         projectIgnore = '',
         ignore = [
           'node_modules',
@@ -58,31 +57,31 @@
       _.assign(ignore, _.trim(projectIgnore).split(/\n/));
     }
 
-    fs.removeSync(destinationDirectory);
-
     recursive(sourceDirectory, ignore, function (err, files) {
       var hashQueue = [];
       for(var i in files) {
         var file = files[i];
-        var dest = file.replace(sourceDirectory, destinationDirectory);
-        hashQueue.push(hashFile.bind(null, file, dest, argv.snippet));
+        hashQueue.push(hashFile.bind(null, file));
       }
 
       async.parallelLimit(hashQueue, 10, function(err, result) {
         var json = JSON.stringify(result, null, 2);
-        var manifestFile = destinationDirectory + '/chcp.manifest';
+        var manifestFile = sourceDirectory + '/chcp.manifest';
 
         fs.writeFile(manifestFile, json, function(err) {
           if(err) {
             return console.log(err);
           }
 
+          if(argv.localdev) {
+            config.update = 'now';
+          }
           var json = JSON.stringify(config, null, 2);
-          fs.writeFile(destinationDirectory + '/chcp.json', json, function(err) {
+          fs.writeFile(sourceDirectory + '/chcp.json', json, function(err) {
             if(err) {
               return console.log(err);
             }
-            console.log('Build '+config.release+' created in '+destinationDirectory);
+            console.log('Build '+config.release+' created in '+sourceDirectory);
             executeDfd.resolve(config);
           });
         });
@@ -92,23 +91,11 @@
     return executeDfd.promise;
   }
 
-  function hashFile(filename, dest, snippet, callback){
+  function hashFile(filename, callback){
     var hash = crypto.createHash('md5'),
         stream = fs.createReadStream(filename);
 
-    // Canot create writeStream before destination directory exists
-    fs.mkdirsSync(path.dirname(dest));
-    var writeStream = fs.createWriteStream(dest);
-
-    writeStream.on('error', function (err) {
-      console.log(err);
-    });
-
-    if(typeof snippet !== 'undefined' && _.endsWith(filename, '.html')) {
-      stream = stream.pipe(replaceStream( /<\/body>/i, snippet+'\n</body>'));
-    }
-    stream = stream.pipe(replaceStream( /Content-Security-Policy/gi, 'DISABLED-FOR-LOCAL-DEVELOPMENT-Content-Security-Policy'));
-    stream.pipe(writeStream);
+    //stream.pipe(writeStream);
     //console.log('Hashing: ', filename);
     stream.on('data', function (data) {
       hash.update(data, 'utf8');

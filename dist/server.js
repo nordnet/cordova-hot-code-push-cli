@@ -21,9 +21,7 @@
       compression = require('compression'),
       build = require('./build.js').execute,
       open = require('open'),
-      remoteDebug = false,
-      //!(argv.nodebug), // remoteDebug broken. socket.io conflict. Will fix later
-  io,
+      io,
       opts = {};
 
   module.exports = {
@@ -58,10 +56,6 @@
       return dfd.promise;
     });
 
-    if (remoteDebug) {
-      funcs.push(startRemoteDebugging);
-    }
-
     funcs.push(function (debugOpts) {
       if (debugOpts) {
         opts.debug_url = debugOpts.debug_url;
@@ -74,11 +68,7 @@
     funcs.push(function (local_url) {
       console.log('local_url', local_url);
       opts.local_url = local_url;
-      opts.snippet = '<script>window.chcpDevServer="' + opts.content_url + '";</script>\n' + '<script src="' + opts.content_url + '/socket.io/socket.io.js"></script>\n' + '<script src="' + opts.content_url + '/connect/assets/liveupdate.js"></script>\n';
-
-      if (opts.debug_url) {
-        opts.snippet += '\n<script src="' + opts.debug_url + '/target/target-script-min.js"></script>';
-      }
+      opts.localdev = true;
 
       return build(opts);
     });
@@ -213,29 +203,5 @@
     });
 
     return publicTunnelDfd.promise;
-  }
-
-  function startRemoteDebugging() {
-    var weinreDfd = Q.defer(),
-        weinre = require('weinre'),
-        weinrePort = process.env.WEINRE_PORT || 31285,
-        weinreOptions = {
-      httpPort: weinrePort,
-      boundHost: 'localhost',
-      verbose: process.env.WEINRE_VERBOSE || false,
-      debug: process.env.WEINRE_DEBUG || false,
-      readTimeout: 5,
-      deathTimeout: 5
-    };
-
-    weinre.run(weinreOptions);
-
-    publicTunnel(weinrePort).then(function (debug_url) {
-      weinreDfd.resolve({ debug_url: debug_url, console_url: 'http://localhost:' + weinrePort + '/client/#anonymous' });
-    }, function (err) {
-      weinreDfd.reject(err);
-    });
-
-    return weinreDfd.promise;
   }
 })();

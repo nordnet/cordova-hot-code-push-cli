@@ -21,9 +21,14 @@ function getInput(prompt, props) {
 }
 
 function writeFile(file, content) {
-  return new Promise(function (resolve) {
-    return _fs2['default'].writeFile(file, JSON.stringify(content, null, 2), function (err) {
-      return resolve(err);
+  return new Promise(function (resolve, reject) {
+    var data = JSON.stringify(content, null, 2);
+    _fs2['default'].writeFile(file, data, function (err) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
     });
   });
 }
