@@ -174,7 +174,7 @@
     // Static assets
     app.use(compression());
     app.enable('view cache');
-    app.use('/', express['static'](buildDirectory, { maxAge: 0 }));
+    app.use('/', express['static'](sourceDirectory, { maxAge: 0 }));
   }
 
   function killCaches(ass) {
@@ -205,3 +205,4 @@
     return publicTunnelDfd.promise;
   }
 })();
+//# sourceMappingURL=server.js.map
