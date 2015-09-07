@@ -14,6 +14,9 @@ Main features are:
 - [Init command](#init-command)
 - [Build command](#build-command)
   - [Build ignore list](#build-ignore-list)
+- [Server command](#server-command)
+- [Login command](#login-command)
+- [Deploy command](#deploy-command)
 
 ### Installation
 
@@ -58,11 +61,30 @@ Then `cordova-hcp` commands should be executed in the `TestProject` folder.
 
 ### Build command
 
+How to run:
+```sh
+cordova-hcp build
+```
+
+Command is used to prepare project for deployment and to generate plugin specific configuration files inside `www` folder:
+- `chcp.json` - holds release related information.
+- `chcp.manifest` - holds information about web project files: their names (relative paths) and hashes.
+
+When executed - you will see in the terminal window:
+```
+Running build
+Build 2015.09.07-11.20.55 created in /Cordova/TestProject/www
+```
+
+As a result, `chcp.json` and `chcp.manifest` files are generated in the `www` folder and project is ready for deployment.
+
+More information about those configs can be found on [Cordova Hot Code Push plugin](#https://github.com/nordnet/cordova-hot-code-push#cordova-hot-code-push-cli-client) documentation page.
+
 #### Build ignore list
 
 In order to exclude files from the build you can:
 
-1. Create `.chcpignore` file in the root of your Cordova Project.
+1. Create `.chcpignore` file in the root of your Cordova Project (for example, `/Cordova/TestProject/.chcpignore`).
 2. Add ignored files. For example:
 ```
 node_modules
