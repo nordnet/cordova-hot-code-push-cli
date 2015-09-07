@@ -235,3 +235,28 @@ echo '.chcplogin' >> .gitignore
 ```
 
 ### Deploy command
+
+How to run:
+```sh
+cordova-hcp deploy
+```
+
+Command uploads your Cordova's web project files on the Amazon server. Can be executed only after `init` and `login` commands.
+
+When executed, you will see the following in the console:
+```
+Running deploy
+Config { name: 'TestProject',
+  s3bucket: 'chcp-test',
+  s3region: 'eu-west-1',
+  ios_identifier: 'id123456789',
+  android_identifier: 'com.example.chcp.testproject',
+  update: 'start',
+  content_url: 'https://s3-eu-west-1.amazonaws.com/chcp-test',
+  release: '2015.09.07-13.02.28' }
+Build 2015.09.07-13.02.28 created in /Cordova/TestProject/www
+Deploy started
+Deploy done
+```
+
+As a result - all files from the `www` folder are uploaded to the Amazon server, which was defined on the `init` step.
