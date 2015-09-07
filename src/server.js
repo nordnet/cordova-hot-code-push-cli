@@ -11,8 +11,6 @@
       buildDirectory = path.join(process.cwd(), '.chcpbuild'),
       watch = require('watch'),
       express = require('express'),
-      exphbs  = require('express-handlebars'),
-      hbs = exphbs.create({}),
       app = express(),
       assetPort = process.env.PORT || 31284,
       compression = require('compression'),
@@ -24,6 +22,7 @@
   module.exports = {
     execute: execute
   };
+  
 
   function updateLocalEnv(localEnv) {
     localEnv.config_url = localEnv.content_url + '/chcp.json';
@@ -68,16 +67,6 @@
       opts.localdev = true;
 
       return build(opts);
-    });
-
-    funcs.push(function(config) {
-      var dfd = Q.defer();
-
-      opts.config = config;
-      serveConnectPage(app, opts);
-
-      dfd.resolve();
-      return dfd.promise;
     });
 
     funcs.push(function(){
@@ -155,18 +144,6 @@
       socket.on('disconnect', function(){
         console.log('user disconnected');
       });
-    });
-  }
-
-  function serveConnectPage(app, opts) {
-    // The connect page
-    app.engine('handlebars', hbs.engine);
-    app.set('view engine', 'handlebars');
-    app.set('views', path.resolve(__dirname, '..', 'server', 'views'));
-    app.use('/connect/assets', express.static(path.resolve(__dirname, '..', 'server', 'assets'), { maxAge: 0 }));
-    app.get('/connect', function (req, res) {
-      console.log('Connect route for scanner application');
-      res.render('connect', opts);
     });
   }
 
