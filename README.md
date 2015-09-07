@@ -5,32 +5,35 @@ This is a command line utility for [Cordova Hot Code Push Plugin](#https://githu
 Main features are:
 - Automatically generate configuration files, required for Hot Code Push plugin (`chcp.json` and `chcp.manifest`).
 - Run local server in order to detect any changes you make in your web project and instantly upload them on the devices.
-- Deploy your web project on the external servers with the single command. For now it only supports deployment on the Amazon servers. More deployment targets will be added later on.
+- Deploy your web project on the external servers with the single command. For now it only supports deployment on the Amazon servers. More deployment targets will be added later.
 
 ## Documentation
 
 - [Installation](#installation)
 - [How to use](#how-to-use)
-- [Init command](#init-command)
-- [Build command](#build-command)
-  - [Build ignore list](#build-ignore-list)
-- [Server command](#server-command)
-- [Login command](#login-command)
-- [Deploy command](#deploy-command)
+- [Commands](#commands)
+  - [Init command](#init-command)
+  - [Build command](#build-command)
+    - [Build ignore list](#build-ignore-list)
+  - [Server command](#server-command)
+  - [Login command](#login-command)
+  - [Deploy command](#deploy-command)
+- [Normal workflow scheme](#normal-workflow-scheme)
+- [Local development workflow scheme](#local-development-workflow-scheme)
 
 ### Installation
 
-You can install CLI client using `npm` (current stable 0.1):
+You can install CLI client using `npm install` (current stable 0.1):
 ```sh
 npm install chcp-cli
 ```
 
 It is also possible to install via repo url directly (__unstable__):
 ```sh
-npm install https://github.com/nordnet/cordova-hot-code-push#cordova-hot-code-push-cli-client
+npm install https://github.com/nordnet/cordova-hot-code-push-cli.git
 ```
 
-When you installs Cordova Hot Code Push Plugin - it will prompt you, if it should install `chcp-cli` as well. If you say `yes` - then `npm install` will be executed automatically. If not - you will have to do it later manually (or don't if you'll wish not to).
+At the end of the [Cordova Hot Code Push Plugin](#https://github.com/nordnet/cordova-hot-code-push) installation process you will be asked, if it should also install CLI client as well. If you say `yes` - then `npm install chcp-cli` will be executed automatically. If not - you will have to do it later manually (or don't if you'll wish not to).
 
 ### How to use
 
@@ -38,7 +41,7 @@ When you installs Cordova Hot Code Push Plugin - it will prompt you, if it shoul
 cordova-hcp <command>
 ```
 
-Commands list:
+Where `<command>` can be:
 - `init` - initialize project parameters, create default `cordova-hcp.json` file.
 - `build` - build project files, generate `chcp.json` and `chcp.manifest` files in the `www` folder. Prepare for deployment.
 - `server` - run local server that is used for local development process.
@@ -57,9 +60,10 @@ TestProject/
 ```
 Then `cordova-hcp` commands should be executed in the `TestProject` folder.
 
-### Init command
+### Commands
 
-How to run:
+#### Init command
+
 ```sh
 cordova-hcp init
 ```
@@ -110,9 +114,8 @@ cordova-hcp server
 ```
 More details about `server` command can be found below.
 
-### Build command
+#### Build command
 
-How to run:
 ```sh
 cordova-hcp build
 ```
@@ -147,8 +150,8 @@ package.json
 ```
 As a result, on the `build` phase those files are not gonna be added to the `chcp.manifest` file.
 
-### Server command
-How to run:
+#### Server command
+
 ```sh
 cordova-hcp server
 ```
@@ -192,7 +195,7 @@ cordova run
 a user connected
 ```
 
-3) Open any file from your `www` folder and do some changes in it. For example, change `index.html` file. As a result, you will see in the servers console:
+3) Open any file from your `www` folder and do some changes in it. For example, change `index.html`. As a result, you will see in the servers console:
 ```
 File changed:  /TestProject/www/index.html
 Build 2015.09.07-10.12.31 created in /TestProject/www
@@ -203,9 +206,8 @@ This means that `cordova-hcp` detected your changes, executed `build` command an
 
 4) On the mobile side plugin captures `new release` event through the socket and loads it from the server.
 
-### Login command
+#### Login command
 
-How to run:
 ```sh
 cordova-hcp login
 ```
@@ -229,14 +231,13 @@ Entered credentials will be placed in the `.chcplogin` file:
 
 From this point you are ready to deploy your project on Amazon server.
 
-**Advise:** don't forget to put `.chcplogin` file in the ignore list of your version control system, if any is used. For GIT you can do this by executing:
+**Advise:** don't forget to put `.chcplogin` file in the ignore list of your version control system, if any is used. For git you can do this by executing:
 ```sh
 echo '.chcplogin' >> .gitignore
 ```
 
-### Deploy command
+#### Deploy command
 
-How to run:
 ```sh
 cordova-hcp deploy
 ```
@@ -260,3 +261,41 @@ Deploy done
 ```
 
 As a result - all files from the `www` folder are uploaded to the Amazon server, which was defined on the `init` step.
+
+### Normal workflow scheme
+
+1) Initialize:
+```sh
+cordova-hcp init
+```
+
+2) Provide login preferences:
+```sh
+cordova-hcp login
+```
+
+3) Build your project:
+```sh
+cordova-hcp build
+```
+
+4) Upload project on the server:
+```sh
+cordova-hcp deploy
+```
+
+5) When new version is ready - repeat steps `3)` and `4)`.
+
+### Local development workflow scheme
+
+1) Run server:
+```sh
+cordova-hcp server
+```
+
+2) Run application:
+```sh
+cordova run
+```
+
+3) Do some changes in the `www` folder. Wait for a few moments and see the result on the launched devices (emulators).
