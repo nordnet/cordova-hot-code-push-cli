@@ -74,10 +74,6 @@
     funcs.push(function () {
       console.log('cordova-hcp local server available at: ' + opts.local_url);
       console.log('cordova-hcp public server available at: ' + opts.content_url);
-      console.log('Connect your app using QR code at: ' + opts.connect_url);
-      if (typeof argv.nobrowser === 'undefined') {
-        open(opts.connect_url);
-      }
     });
 
     return funcs.reduce(Q.when, Q('initial'));
