@@ -9,6 +9,19 @@
   "engines": {
     "node": ">=0.10.3 <0.12"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nordnet/cordova-hot-code-push-cli.git"
+  },
+  "keywords": [
+    "cordova",
+    "nordnet",
+    "mobile",
+    "cordova-hot-code-push-plugin",
+    "ecosystem:cordova",
+    "cordova-android",
+    "cordova-ios"
+  ],
   "scripts": {
     "pretranspile": "rimraf dist",
     "transpile": "babel src --out-dir dist --source-maps",
