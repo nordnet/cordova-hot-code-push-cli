@@ -170,41 +170,41 @@ You can use `server` without running `init` at first. In that case, application 
 
 How it works:
 
-1) Launch server in the project root by executing:
-```sh
-cordova-hcp server
-```
+1. Launch server in the project root by executing:
+  ```sh
+  cordova-hcp server
+  ```
 
-As a result, you will see something like this:
-```
-Running server
-Checking:  /Cordova/TestProject/www
-local_url http://localhost:31284
-Build 2015.09.07-10.12.25 created in /Cordova/TestProject/www
-cordova-hcp local server available at: http://localhost:31284
-cordova-hcp public server available at: https://19d5cfa2.ngrok.com
-```
+  As a result, you will see something like this:
+  ```
+  Running server
+  Checking:  /Cordova/TestProject/www
+  local_url http://localhost:31284
+  Build 2015.09.07-10.12.25 created in /Cordova/TestProject/www
+  cordova-hcp local server available at: http://localhost:31284
+  cordova-hcp public server available at: https://19d5cfa2.ngrok.com
+  ```
 
-2) Launch application on your emulators or test devices:
-```sh
-cordova run
-```
+2. Launch application on your emulators or test devices:
+  ```sh
+  cordova run
+  ```
 
-3) When application starts - it connects to the local server via socket. In the servers console window you should see following message:
-```sh
-a user connected
-```
+3. When application starts - it connects to the local server via socket. In the servers console window you should see following message:
+  ```sh
+  a user connected
+  ```
 
-3) Open any file from your `www` folder and do some changes in it. For example, change `index.html`. As a result, you will see in the servers console:
-```
-File changed:  /TestProject/www/index.html
-Build 2015.09.07-10.12.31 created in /TestProject/www
-Should trigger reload for build: 2015.09.07-10.12.31
-```
+4. Open any file from your `www` folder and do some changes in it. For example, change `index.html`. As a result, you will see in the servers console:
+  ```
+  File changed:  /TestProject/www/index.html
+  Build 2015.09.07-10.12.31 created in /TestProject/www
+  Should trigger reload for build: 2015.09.07-10.12.31
+  ```
 
-This means that `cordova-hcp` detected your changes, executed `build` command and sent notification via socket to the connected users.
+  This means that `cordova-hcp` detected your changes, executed `build` command and sent notification via socket to the connected users.
 
-4) On the mobile side plugin captures `new release` event through the socket and loads it from the server.
+5. On the mobile side plugin captures `new release` event through the socket and loads it from the server.
 
 #### Login command
 
@@ -264,38 +264,38 @@ As a result - all files from the `www` folder are uploaded to the Amazon server,
 
 ### Normal workflow scheme
 
-1) Initialize:
-```sh
-cordova-hcp init
-```
+1. Initialize:
+  ```sh
+  cordova-hcp init
+  ```
 
-2) Provide login preferences:
-```sh
-cordova-hcp login
-```
+2. Provide login preferences:
+  ```sh
+  cordova-hcp login
+  ```
 
-3) Build your project:
-```sh
-cordova-hcp build
-```
+3. Build your project:
+  ```sh
+  cordova-hcp build
+  ```
 
-4) Upload project on the server:
-```sh
-cordova-hcp deploy
-```
+4. Upload project on the server:
+  ```sh
+  cordova-hcp deploy
+  ```
 
-5) When new version is ready - repeat steps `3)` and `4)`.
+5. When new version is ready - repeat steps `3.` and `4.`.
 
 ### Local development workflow scheme
 
-1) Run server:
-```sh
-cordova-hcp server
-```
+1. Run server:
+  ```sh
+  cordova-hcp server
+  ```
 
-2) Run application:
-```sh
-cordova run
-```
+2. Run application:
+  ```sh
+  cordova run
+  ```
 
-3) Do some changes in the `www` folder. Wait for a few moments and see the result on the launched devices (emulators).
+3. Do some changes in the `www` folder. Wait for a few moments and see the result on the launched devices (emulators).
