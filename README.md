@@ -1,6 +1,6 @@
 # Cordova Hot Code Push Plugin CLI client
 
-This is a command line utility for [Cordova Hot Code Push Plugin](#https://github.com/nordnet/cordova-hot-code-push). It will help you with development and deployment of your web project for Cordova application.
+This is a command line utility for [Cordova Hot Code Push Plugin](https://github.com/nordnet/cordova-hot-code-push). It will help you with development and deployment of your web project for Cordova application.
 
 Main features are:
 - Automatically generate configuration files, required for Hot Code Push plugin (`chcp.json` and `chcp.manifest`).
@@ -25,7 +25,7 @@ Main features are:
 
 You can install CLI client using `npm install` (current stable 0.1):
 ```sh
-npm install chcp-cli
+npm install cordova-hot-code-push-cli
 ```
 
 It is also possible to install via repo url directly (__unstable__):
@@ -33,7 +33,7 @@ It is also possible to install via repo url directly (__unstable__):
 npm install https://github.com/nordnet/cordova-hot-code-push-cli.git
 ```
 
-At the end of the [Cordova Hot Code Push Plugin](#https://github.com/nordnet/cordova-hot-code-push) installation process you will be asked, if it should also install CLI client as well. If you say `yes` - then `npm install chcp-cli` will be executed automatically. If not - you will have to do it later manually (or don't if you'll wish not to).
+At the end of the [Cordova Hot Code Push Plugin](https://github.com/nordnet/cordova-hot-code-push) installation process you will be asked, if it should also install CLI client as well. If you say `yes` - then `npm install chcp-cli` will be executed automatically. If not - you will have to do it later manually (or don't if you'll wish not to).
 
 ### How to use
 
@@ -132,7 +132,7 @@ Build 2015.09.07-11.20.55 created in /Cordova/TestProject/www
 
 As a result, `chcp.json` and `chcp.manifest` files are generated in the `www` folder and project is ready for deployment.
 
-More information about those configs can be found on [Cordova Hot Code Push plugin](#https://github.com/nordnet/cordova-hot-code-push#cordova-hot-code-push-cli-client) documentation page.
+More information about those configs can be found on [Cordova Hot Code Push plugin](https://github.com/nordnet/cordova-hot-code-push) documentation page.
 
 #### Build ignore list
 
