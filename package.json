@@ -1,6 +1,6 @@
 {
-  "name": "chcp-cli",
-  "version": "0.0.1",
+  "name": "cordova-hot-code-push-cli",
+  "version": "1.0.0",
   "description": "Cordova Hot Code Push CLI",
   "preferGlobal": "true",
   "bin": {
