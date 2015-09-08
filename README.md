@@ -23,7 +23,7 @@ Main features are:
 
 ### Installation
 
-You can install CLI client using `npm install` (current stable 1.0.0):
+You can install CLI client using `npm install` (current stable 1.0.1):
 ```sh
 npm install cordova-hot-code-push-cli
 ```
