@@ -15,7 +15,6 @@
       assetPort = process.env.PORT || 31284,
       compression = require('compression'),
       build = require('./build.js').execute,
-      open = require('open'),
       io,
       opts = {};
 

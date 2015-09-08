@@ -8,7 +8,6 @@
       crypto = require('crypto'),
       Q = require('q'),
       _ = require('lodash'),
-      replaceStream = require('replacestream'),
       createHash = require('crypto').createHash,
       recursive = require('recursive-readdir'),
       sourceDirectory = path.join(process.cwd(), 'www'),
