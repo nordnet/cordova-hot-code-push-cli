@@ -25,15 +25,13 @@ Main features are:
 
 You can install CLI client using `npm install` (current stable 1.0.1):
 ```sh
-npm install cordova-hot-code-push-cli
+sudo npm install -g cordova-hot-code-push-cli
 ```
 
 It is also possible to install via repo url directly (__unstable__):
 ```sh
-npm install https://github.com/nordnet/cordova-hot-code-push-cli.git
+sudo npm install -g https://github.com/nordnet/cordova-hot-code-push-cli.git
 ```
-
-At the end of the [Cordova Hot Code Push Plugin](https://github.com/nordnet/cordova-hot-code-push) installation process you will be asked, if it should also install CLI client as well. If you say `yes` - then `npm install chcp-cli` will be executed automatically. If not - you will have to do it later manually (or don't if you'll wish not to).
 
 ### How to use
 
