@@ -107,7 +107,7 @@
 
     stream.on('end', function () {
       var result = hash.digest('hex'),
-          file = filename.replace(sourceDirectory+'/', '');
+          file = path.relative(sourceDirectory, filename).replace(new RegExp("\\\\","g"),"/");
 
       callback(null, {file: file, hash: result});
     });
