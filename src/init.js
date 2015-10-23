@@ -69,8 +69,8 @@ const urlSchema = {
   },
 };
 
-export function execute(argv) {
-  prompt.override = argv;
+export function execute(context) {
+  prompt.override = context.argv;
   prompt.message = 'Please provide';
   prompt.delimiter = ': ';
   prompt.start();

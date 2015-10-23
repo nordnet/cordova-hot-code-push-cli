@@ -22,10 +22,10 @@ const schema = {
   },
 };
 
-export function execute(argv) {
+export function execute(context) {
   validateConfig();
 
-  prompt.override = argv;
+  prompt.override = context.argv;
   prompt.message = 'Please provide';
   prompt.delimiter = ': ';
   prompt.start();

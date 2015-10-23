@@ -88,8 +88,8 @@ var urlSchema = {
   }
 };
 
-function execute(argv) {
-  _prompt2['default'].override = argv;
+function execute(context) {
+  _prompt2['default'].override = context.argv;
   _prompt2['default'].message = 'Please provide';
   _prompt2['default'].delimiter = ': ';
   _prompt2['default'].start();
@@ -137,4 +137,3 @@ function done(err) {
   console.log('If you wish to exclude files from being published, specify them in .chcpignore');
   console.log('Before you can push updates you need to run "chcp login" in project directory');
 }
-//# sourceMappingURL=init.js.map

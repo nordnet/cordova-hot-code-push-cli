@@ -39,10 +39,10 @@ var schema = {
   }
 };
 
-function execute(argv) {
+function execute(context) {
   validateConfig();
 
-  _prompt2['default'].override = argv;
+  _prompt2['default'].override = context.argv;
   _prompt2['default'].message = 'Please provide';
   _prompt2['default'].delimiter = ': ';
   _prompt2['default'].start();
@@ -78,4 +78,3 @@ function done(err) {
   console.log('You SHOULD add .chcplogin to your .gitignore');
   console.log('( echo \'.chcplogin\' >> .gitignore )');
 }
-//# sourceMappingURL=login.js.map

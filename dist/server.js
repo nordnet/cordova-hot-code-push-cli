@@ -2,15 +2,10 @@
 
 (function () {
   var path = require('path'),
-      configFile = path.join(process.cwd(), 'cordova-hcp.json'),
-      ignoreFile = path.join(process.cwd(), '.chcpignore'),
       envFile = path.join(process.cwd(), '.chcpenv'),
-
-  // argv = require('optimist').argv,
-  Q = require('q'),
+      Q = require('q'),
       _ = require('lodash'),
       fs = require("fs"),
-      sourceDirectory = path.join(process.cwd(), 'www'),
       buildDirectory = path.join(process.cwd(), '.chcpbuild'),
       watch = require('watch'),
       express = require('express'),
@@ -19,6 +14,8 @@
       compression = require('compression'),
       build = require('./build.js').execute,
       io,
+      chcpContext,
+      sourceDirectory,
       opts = {};
 
   module.exports = {
@@ -34,10 +31,13 @@
     return localEnv;
   }
 
-  function execute(argv) {
-    var executeDfd = Q.defer();
+  function execute(context) {
+    chcpContext = context;
+    chcpContext.argv.localdev = true;
+    sourceDirectory = chcpContext.sourceDirectory;
 
-    var funcs = [];
+    var executeDfd = Q.defer(),
+        funcs = [];
 
     funcs.push(function () {
       return publicTunnel(assetPort);
@@ -48,6 +48,7 @@
 
       opts.content_url = content_url;
       opts.connect_url = content_url + '/connect';
+      chcpContext.argv.content_url = content_url;
 
       dfd.resolve();
       return dfd.promise;
@@ -65,9 +66,8 @@
     funcs.push(function (local_url) {
       console.log('local_url', local_url);
       opts.local_url = local_url;
-      opts.localdev = true;
 
-      return build(opts);
+      return build(chcpContext);
     });
 
     funcs.push(function () {
@@ -120,7 +120,7 @@
 
   function handleFileChange(file) {
     console.log('File changed: ', file);
-    build(opts).then(function (config) {
+    build(chcpContext).then(function (config) {
       console.log('Should trigger reload for build: ' + config.release);
       io.emit('release', { config: config });
     });
@@ -176,4 +176,3 @@
     return publicTunnelDfd.promise;
   }
 })();
-//# sourceMappingURL=server.js.map

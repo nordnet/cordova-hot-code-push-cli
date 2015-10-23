@@ -1,26 +1,22 @@
 (function(){
   var path = require('path'),
       prompt = require('prompt'),
-      // argv = require('optimist').argv,
       build = require('./build.js').execute,
       fs = require('fs'),
       Q = require('q'),
       _ = require('lodash'),
-      s3 = require('s3');
-
-  var configFile = path.join(process.cwd(), 'cordova-hcp.json');
-  var ignoreFile = path.join(process.cwd(), '.chcpignore');
-  var loginFile = path.join(process.cwd(), '.chcplogin');
+      s3 = require('s3'),
+      loginFile = path.join(process.cwd(), '.chcplogin');
 
   module.exports = {
     execute: execute
   };
 
-  function execute(argv) {
+  function execute(context) {
     var executeDfd = Q.defer();
 
-    build().then(function(){
-      deploy().then(function(){
+    build(context).then(function(){
+      deploy(context).then(function(){
         executeDfd.resolve();
       });
     });
@@ -28,14 +24,13 @@
     return executeDfd.promise;
   }
 
-  function deploy(argv) {
+  function deploy(context) {
     var executeDfd = Q.defer(),
         config,
-        credentials,
-        sourceDirectory = path.join(process.cwd(), 'www');
+        credentials;
 
     try {
-      config = fs.readFileSync(configFile, {encoding: 'utf-8'});
+      config = fs.readFileSync(context.defaultConfig, 'utf-8');
       config = JSON.parse(config);
     } catch(e) {
       console.log('Cannot parse cordova-hcp.json. Did you run cordova-hcp init?');
@@ -47,7 +42,7 @@
       process.exit(0);
     }
     try {
-      credentials = fs.readFileSync(loginFile, {encoding: 'utf-8'});
+      credentials = fs.readFileSync(loginFile, 'utf-8');
       credentials = JSON.parse(credentials);
     } catch(e) {
       console.log('Cannot parse .chcplogin: ', e);
@@ -73,7 +68,7 @@
       },
     });
     var params = {
-      localDir: sourceDirectory,
+      localDir: context.sourceDirectory,
       deleteRemoved: true,
       s3Params: {
         Bucket: config.s3bucket,
