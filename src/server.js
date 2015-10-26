@@ -12,6 +12,7 @@
       compression = require('compression'),
       build = require('./build.js').execute,
       minimatch = require('minimatch'),
+      hidefile = require('hidefile'),
       io,
       chcpContext,
       sourceDirectory,
@@ -83,7 +84,7 @@
     var fileIsAllowed = true;
     var relativeFilePath = path.relative(chcpContext.sourceDirectory, file);
     for (var i=0, len=ignoredFiles.length; i<len; i++) {
-      if (minimatch(relativeFilePath, ignoredFiles[i])) {
+      if (hidefile.isHiddenSync(file) || minimatch(relativeFilePath, ignoredFiles[i])) {
         fileIsAllowed = false;
         break;
       }

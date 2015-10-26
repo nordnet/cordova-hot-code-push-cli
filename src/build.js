@@ -8,6 +8,7 @@
     _ = require('lodash'),
     createHash = require('crypto').createHash,
     recursive = require('recursive-readdir'),
+    hidefile = require('hidefile'),
     chcpContext;
 
   module.exports = {
@@ -22,11 +23,7 @@
       ignore = context.ignoredFiles();
 
     recursive(chcpContext.sourceDirectory, ignore, function(err, files) {
-      var hashQueue = [];
-      for (var i in files) {
-        var file = files[i];
-        hashQueue.push(hashFile.bind(null, file));
-      }
+      var hashQueue = prepareFilesHashQueue(files);
 
       async.parallelLimit(hashQueue, 10, function(err, result) {
         var json = JSON.stringify(result, null, 2);
@@ -53,6 +50,18 @@
     });
 
     return executeDfd.promise;
+  }
+
+  function prepareFilesHashQueue(files) {
+    var queue = [];
+    for (var i in files) {
+      var file = files[i];
+      if (!hidefile.isHiddenSync(file)) {
+        queue.push(hashFile.bind(null, file));
+      }
+    }
+
+    return queue;
   }
 
   function prepareConfig(context) {
