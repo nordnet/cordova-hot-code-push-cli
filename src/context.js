@@ -6,7 +6,8 @@
     ignoreFilePath = path.join(process.cwd(), '.chcpignore'),
     DEFAULT_IGNORE_LIST = [
       '.DS_Store',
-      'node_modules',
+      'node_modules/*',
+      'node_modules\\*',
       'chcp.json',
       'chcp.manifest',
       '.chcp*',
@@ -37,8 +38,12 @@
   }
 
   Context.prototype.ignoredFiles = function() {
-    var projectIgnore = '',
-      ignore = DEFAULT_IGNORE_LIST;
+    if (this.__ignoredFiles) {
+      return this.__ignoredFiles;
+    }
+
+    this.__ignoredFiles = DEFAULT_IGNORE_LIST;
+    var projectIgnore = '';
 
     try {
       projectIgnore = fs.readFileSync(ignoreFilePath, {
@@ -49,10 +54,10 @@
     }
 
     if (projectIgnore.length > 0) {
-      _.assign(ignore, _.trim(projectIgnore).split(/\n/));
+      _.assign(this.__ignoredFiles, _.trim(projectIgnore).split(/\n/));
     }
 
-    return ignore;
+    return this.__ignoredFiles;
   };
 
   function getSourceDirectory(argv) {

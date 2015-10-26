@@ -13,9 +13,11 @@
       assetPort = process.env.PORT || 31284,
       compression = require('compression'),
       build = require('./build.js').execute,
+      minimatch = require('minimatch'),
       io,
       chcpContext,
       sourceDirectory,
+      ignoredFiles,
       opts = {};
 
   module.exports = {
@@ -33,6 +35,7 @@
 
   function execute(context) {
     chcpContext = context;
+    ignoredFiles = context.ignoredFiles();
     chcpContext.argv.localdev = true;
     sourceDirectory = chcpContext.sourceDirectory;
 
@@ -47,7 +50,6 @@
       var dfd = Q.defer();
 
       opts.content_url = content_url;
-      opts.connect_url = content_url + '/connect';
       chcpContext.argv.content_url = content_url;
 
       dfd.resolve();
@@ -79,9 +81,17 @@
   }
 
   function fileChangeFilter(file) {
-    // Ignore changes in all files and folder containing .chcp
-    // This excludes changes in build directory
-    return !(file.indexOf('.chcp') !== -1 || file.indexOf('chcp.json') !== -1 || file.indexOf('chcp.manifest') !== -1);
+    // Ignore changes in files from the ignore list
+    var fileIsAllowed = true;
+    var relativeFilePath = path.relative(chcpContext.sourceDirectory, file);
+    for (var i = 0, len = ignoredFiles.length; i < len; i++) {
+      if (minimatch(relativeFilePath, ignoredFiles[i])) {
+        fileIsAllowed = false;
+        break;
+      }
+    }
+
+    return fileIsAllowed;
   }
 
   function assetServer(opts) {
