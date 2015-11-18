@@ -57,7 +57,6 @@
     "chai": "^3.2.0",
     "eslint": "^0.24.1",
     "eslint-config-airbnb": "0.0.7",
-    "eslint-plugin-react": "^3.1.0",
     "jscs": "^2.0.0",
     "mocha": "^2.2.5",
     "rimraf": "^2.4.2",
