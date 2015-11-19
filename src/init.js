@@ -18,13 +18,13 @@ const name = {
 };
 
 const s3bucket = {
-  description: 'Amazon S3 Bucket name (required for cordova-hcp deploy)',
+  description: 'Amazon S3 Bucket name (leave it blank to use an FTP)',
   pattern: /^[a-zA-Z\-0-9\.]+$/,
   message: 'Name must be only letters, numbers, or dashes',
 };
 
 const s3region = {
-  description: 'Amazon S3 region (required for chcp deploy)',
+  description: 'Amazon S3 region (leave it blank to use an FTP)',
   pattern: /^(us-east-1|us-west-2|us-west-1|eu-west-1|eu-central-1|ap-southeast-1|ap-southeast-2|ap-northeast-1|sa-east-1)$/,
   default: 'us-east-1',
   message: 'Must be one of: us-east-1, us-west-2, us-west-1, eu-west-1, eu-central-1, ap-southeast-1, ap-southeast-2, ap-northeast-1, sa-east-1',

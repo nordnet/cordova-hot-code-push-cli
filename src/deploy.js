@@ -6,6 +6,7 @@
       Q = require('q'),
       _ = require('lodash'),
       s3 = require('s3'),
+      FtpClient = require('ftp-client'),
       loginFile = path.join(process.cwd(), '.chcplogin');
 
   module.exports = {
@@ -25,9 +26,8 @@
   }
 
   function deploy(context) {
-    var executeDfd = Q.defer(),
-        config,
-        credentials;
+    var config,
+        loginInfo;
 
     try {
       config = fs.readFileSync(context.defaultConfig, 'utf-8');
@@ -42,19 +42,30 @@
       process.exit(0);
     }
     try {
-      credentials = fs.readFileSync(loginFile, 'utf-8');
-      credentials = JSON.parse(credentials);
+      loginInfo = fs.readFileSync(loginFile, 'utf-8');
+      loginInfo = JSON.parse(loginInfo);
     } catch(e) {
       console.log('Cannot parse .chcplogin: ', e);
     }
-    if(!credentials) {
+    if(!loginInfo) {
       console.log('You need to run "cordova-hcp login" before you can run "cordova-hcp deploy".');
       process.exit(0);
     }
 
-    // console.log('Credentials: ', credentials);
+    // console.log('LoginInfo: ', loginInfo);
     // console.log('Config: ', config);
+    switch (loginInfo.pushMode) {
+      case 'ftp':
+        return uploadToFTP(context, config, loginInfo.ftp);
+      case 's3':
+        return uploadToS3(context, config, loginInfo.s3);
+      default:
+        throw new Error('unsupported push mode.');
+    }
+  }
 
+  function uploadToS3(context, config, credentials) {
+    var executeDfd = Q.defer();
     var client = s3.createClient({
       maxAsyncS3: 20,
       s3RetryCount: 3,
@@ -93,5 +104,32 @@
       executeDfd.resolve();
     });
     return executeDfd.promise;
+  }
+
+  function uploadToFTP(context, config, ftpConfig) {
+    const client = new FtpClient({
+        host: ftpConfig.host,
+        port: ftpConfig.port,
+        user: ftpConfig.username,
+        password: ftpConfig.password
+    }, {
+      logging: 'basic'
+    });
+
+    const executeDfd = Q.defer();
+
+    client.connect(function () {
+        client.upload(`${context.sourceDirectory}/**`, ftpConfig.path, {
+            baseDir: context.sourceDirectory,
+            overwrite: 'all'
+        }, function (result) {
+            if (!_.isEmpty(result.errors)) {
+                console.error('Some files could not be uploaded: ', result.errors);
+                return executeDfd.reject();
+            }
+            executeDfd.resolve();
+        });
+    });
+    return executeDfd;
   }
 })();

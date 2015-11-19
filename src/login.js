@@ -7,7 +7,39 @@ import { getInput, writeFile } from './utils';
 const configFile = path.join(process.cwd(), 'cordova-hcp.json');
 const loginFile = path.join(process.cwd(), '.chcplogin');
 
-const schema = {
+const ftpSchema = {
+  properties: {
+    host: {
+      description: 'Enter FTP host (required)',
+      message: 'FTP host',
+      required: true,
+    },
+    port: {
+      description: 'Enter FTP port',
+      message: 'FTP port',
+      required: false,
+      default: 21
+    },
+    path: {
+      description: 'Enter FTP path to your app',
+      message: 'FTP path',
+      required: true
+    },
+    username: {
+      description: 'Enter FTP username (required)',
+      message: 'FTP username',
+      required: true,
+    },
+    password: {
+      description: 'Enter FTP password (required)',
+      message: 'FTP password',
+      hidden: true,
+      required: true,
+    },
+  }
+};
+
+const s3Schema = {
   properties: {
     key: {
       description: 'Amazon Access Key Id',
@@ -22,6 +54,18 @@ const schema = {
   },
 };
 
+const loginSchema = {
+  properties: {
+    pushMode: {
+      description: 'Choose a method to push your code: (s3 | ftp)',
+      message: 'You need to choose a method to push your code',
+      required: true,
+      pattern: /(s3|ftp)/,
+      default: 's3'
+    }
+  },
+};
+
 export function execute(context) {
   validateConfig();
 
@@ -30,9 +74,18 @@ export function execute(context) {
   prompt.delimiter = ': ';
   prompt.start();
 
-  getInput(prompt, schema)
-    .then(content => writeFile(loginFile, content))
-    .then(done);
+  getInput(prompt, loginSchema)
+    .then(res => getPushSchemaInput(pushModeToSchema(res.pushMode), res));
+}
+
+function getPushSchemaInput(schema, res) {
+    getInput(prompt, schema)
+      .then(content => ({
+        pushMode: res.pushMode,
+        [res.pushMode]: content
+       }))
+      .then(content => writeFile(loginFile, content))
+      .then(done);
 }
 
 function validateConfig() {
@@ -60,4 +113,14 @@ function done(err) {
   console.log('Project initialized and .chcindex.plogin file created.');
   console.log('You SHOULD add .chcplogin to your .gitignore');
   console.log('( echo \'.chcplogin\' >> .gitignore )');
+}
+
+function pushModeToSchema(pushMode) {
+    switch (pushMode) {
+        case 'ftp':
+            return ftpSchema;
+        case 's3':
+        default:
+            return s3Schema;
+    }
 }
