@@ -7,7 +7,8 @@
       fs = require('fs'),
       Q = require('q'),
       _ = require('lodash'),
-      s3 = require('s3'),
+      s3sync = require('s3-sync'),
+      readdirp = require('readdirp'),
       loginFile = path.join(process.cwd(), '.chcplogin');
 
   module.exports = {
@@ -57,35 +58,41 @@
     // console.log('Credentials: ', credentials);
     // console.log('Config: ', config);
 
-    var client = s3.createClient({
-      maxAsyncS3: 20,
-      s3RetryCount: 3,
-      s3RetryDelay: 1000,
-      multipartUploadThreshold: 20971520,
-      multipartUploadSize: 15728640,
-      s3Options: {
-        accessKeyId: credentials.key,
-        secretAccessKey: credentials.secret,
-        region: config.s3region
-      }
+    var files = readdirp({
+      root: context.sourceDirectory
     });
-    var params = {
-      localDir: context.sourceDirectory,
-      deleteRemoved: true,
-      s3Params: {
-        Bucket: config.s3bucket,
-        ACL: 'public-read',
-        CacheControl: 'no-cache, no-store, must-revalidate',
-        Expires: 0
-      }
-    };
+
+    console.log(context.sourceDirectory, context.ignoredFiles());
+
+    // Takes the same options arguments as `knox`,
+    // plus some additional options listed above
+    var uploader = s3sync({
+      key: credentials.key,
+      secret: credentials.secret,
+      region: config.s3region,
+      bucket: config.s3bucket,
+      acl: 'public-read',
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Expires': 0
+      },
+      concurrency: 20
+    }).on('data', function (file) {
+      console.log(file.fullPath + ' -> ' + file.url);
+    });
+
+    files.pipe(uploader);
 
     console.log('Deploy started');
-    var uploader = client.uploadDir(params);
     uploader.on('error', function (err) {
       console.error("unable to sync:", err.stack);
       executeDfd.reject();
     });
+    uploader.on('fail', function (err) {
+      console.error("unable to sync:", err);
+      executeDfd.reject();
+    });
+
     //uploader.on('progress', function() {
     //  var progress = uploader.progressTotal - uploader.progressAmount;
     //  console.log("progress", progress, uploader.progressTotal, uploader.progressAmount);
@@ -97,3 +104,4 @@
     return executeDfd.promise;
   }
 })();
+//# sourceMappingURL=deploy.js.map
