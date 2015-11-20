@@ -60,8 +60,6 @@
       root: context.sourceDirectory
     });
 
-    console.log(context.sourceDirectory, context.ignoredFiles());
-
     // Takes the same options arguments as `knox`,
     // plus some additional options listed above
     var uploader = s3sync({
@@ -71,12 +69,14 @@
       bucket: config.s3bucket,
       acl: 'public-read',
       headers: {
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Expires': 0
+        CacheControl: 'no-cache, no-store, must-revalidate',
+        Expires: 0
       },
       concurrency: 20
     }).on('data', function(file) {
-      console.log(file.fullPath + ' -> ' + file.url)
+      if (file.fresh) {
+        console.log("Updated " + file.fullPath + ' -> ' + file.url)
+      }
     });
 
     files.pipe(uploader);
