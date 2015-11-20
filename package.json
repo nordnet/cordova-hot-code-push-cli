@@ -44,6 +44,7 @@
     "ngrok": "^0.1.99",
     "prompt": "^0.2.14",
     "q": "^1.4.1",
+    "readdirp": "^2.0.0",
     "recursive-readdir": "^1.2.1",
     "s3-sync-aws": "^1.1.0",
     "socket.io": "^1.3.6",
