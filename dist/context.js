@@ -63,4 +63,3 @@
     return path.join(process.cwd(), consoleArgs[1]);
   }
 })();
-//# sourceMappingURL=context.js.map

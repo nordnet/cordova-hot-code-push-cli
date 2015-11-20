@@ -78,4 +78,3 @@ function done(err) {
   console.log('You SHOULD add .chcplogin to your .gitignore');
   console.log('( echo \'.chcplogin\' >> .gitignore )');
 }
-//# sourceMappingURL=login.js.map
