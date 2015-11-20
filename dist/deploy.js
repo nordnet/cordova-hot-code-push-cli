@@ -7,7 +7,7 @@
       fs = require('fs'),
       Q = require('q'),
       _ = require('lodash'),
-      s3sync = require('s3-sync'),
+      s3sync = require('s3-sync-aws'),
       readdirp = require('readdirp'),
       loginFile = path.join(process.cwd(), '.chcplogin');
 
