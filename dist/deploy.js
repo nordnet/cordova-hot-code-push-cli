@@ -62,8 +62,6 @@
       root: context.sourceDirectory
     });
 
-    // Takes the same options arguments as `knox`,
-    // plus some additional options listed above
     var uploader = s3sync({
       key: credentials.key,
       secret: credentials.secret,
