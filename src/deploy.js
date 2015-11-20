@@ -13,6 +13,11 @@
     execute: execute
   };
 
+  const deploymentModes = {
+    s3: uploadToS3,
+    ftp: uploadToFTP
+  };
+
   function execute(context) {
     var executeDfd = Q.defer();
 
@@ -52,15 +57,12 @@
       process.exit(0);
     }
 
-    // console.log('LoginInfo: ', loginInfo);
-    // console.log('Config: ', config);
-    switch (loginInfo.pushMode) {
-      case 'ftp':
-        return uploadToFTP(context, config, loginInfo.ftp);
-      case 's3':
-        return uploadToS3(context, config, loginInfo.s3);
-      default:
-        throw new Error('unsupported push mode.');
+    const pushMode = loginInfo.pushMode;
+    try {
+      return deploymentModes[pushMode](context, config, loginInfo[pushMode]);
+    } catch (e) {
+      console.error('unsupported deployment method ', e);
+      process.exit(0);
     }
   }
 
