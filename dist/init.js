@@ -61,9 +61,9 @@ var androidIdentifier = {
 
 var update = {
   description: 'Update method (required)',
-  pattern: /(start|resume|instant)/,
+  pattern: /(start|resume|now)/,
   required: true,
-  message: 'Needs to be one of start, resume or instant',
+  message: 'Needs to be one of start, resume or now',
   'default': 'resume'
 };
 
