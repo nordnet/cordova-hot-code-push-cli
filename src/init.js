@@ -24,7 +24,7 @@ const s3bucket = {
 };
 
 const s3region = {
-  description: 'Amazon S3 region (required for chcp deploy)',
+  description: 'Amazon S3 region (required for cordova-hcp deploy)',
   pattern: /^(us-east-1|us-west-2|us-west-1|eu-west-1|eu-central-1|ap-southeast-1|ap-southeast-2|ap-northeast-1|sa-east-1)$/,
   default: 'us-east-1',
   message: 'Must be one of: us-east-1, us-west-2, us-west-1, eu-west-1, eu-central-1, ap-southeast-1, ap-southeast-2, ap-northeast-1, sa-east-1',
@@ -62,7 +62,7 @@ const schema = {
 const urlSchema = {
   properties: {
     content_url: {
-      description: 'Enter full URL to directory where chcp build result will be uploaded',
+      description: 'Enter full URL to directory where cordova-hcp build result will be uploaded',
       message: 'Must supply URL',
       required: true,
     },
@@ -111,7 +111,7 @@ function done(err) {
   if (err) {
     return console.log(err);
   }
-  console.log('Project initialized and chcp.json file created.');
+  console.log('Project initialized and cordova-hcp.json file created.');
   console.log('If you wish to exclude files from being published, specify them in .chcpignore');
-  console.log('Before you can push updates you need to run "chcp login" in project directory');
+  console.log('Before you can push updates you need to run "cordova-hcp login" in project directory');
 }

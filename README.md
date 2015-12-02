@@ -84,13 +84,13 @@ For example, execute `init` in your project root folder and fill preferences as 
 Running init
 Please provide: Enter project name (required):  TestProject
 Please provide: Amazon S3 Bucket name (required for cordova-hcp deploy):  chcp-test
-Please provide: Amazon S3 region (required for chcp deploy):  (us-east-1) eu-west-1
+Please provide: Amazon S3 region (required for cordova-hcp deploy):  (us-east-1) eu-west-1
 Please provide: IOS app identifier:  id123456789
 Please provide: Android app identifier:  com.example.chcp.testproject
 Please provide: Update method (required):  (resume) start
-Project initialized and chcp.json file created.
+Project initialized and cordova-hcp.json file created.
 If you wish to exclude files from being published, specify them in .chcpignore
-Before you can push updates you need to run "chcp login" in project directory
+Before you can push updates you need to run "cordova-hcp login" in project directory
 ```
 
 As a result, content of the `cordova-hcp.json` file will be:
