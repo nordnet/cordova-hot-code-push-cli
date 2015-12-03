@@ -17,6 +17,7 @@ Main features are:
   - [Server command](#server-command)
   - [Login command](#login-command)
   - [Deploy command](#deploy-command)
+- [Default configuration file](#default-configuration-file)
 - [Ignored files list](#ignored-files-list)
 - [Normal workflow scheme](#normal-workflow-scheme)
 - [Local development workflow scheme](#local-development-workflow-scheme)
@@ -257,6 +258,20 @@ Deploy done
 ```
 
 As a result - all files from your web directory are uploaded to the Amazon server, which was defined on the `init` step.
+
+### Default configuration file
+
+As mentioned in [Init command](#init-command) section of the readme - after executing `cordova-hcp init` command you will get a default configuration file, called `cordova-hcp.json`. It is created in the root folder of your project. When you run `cordova-hcp build` - data from that file is used to generate `chcp.json` file in `www` folder.
+
+If you want - you can create `cordova-hcp.json` manually and put in there any options you want. It's just a JSON object like so:
+```json
+{
+  "update": "start",
+  "content_url": "https://mycoolserver.com/mobile_content/"
+}
+```
+
+By default, you would probably put in there your `content_url`. But it can also be any other setting.
 
 ### Ignored files list
 
