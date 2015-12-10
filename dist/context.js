@@ -6,7 +6,7 @@
       fs = require('fs-extra'),
       _ = require('lodash'),
       ignoreFilePath = path.join(process.cwd(), '.chcpignore'),
-      DEFAULT_IGNORE_LIST = ['.DS_Store', 'node_modules/*', 'node_modules\\*', 'chcp.json', 'chcp.manifest', '.chcp*', '.gitignore', '.git', 'package.json'];
+      DEFAULT_IGNORE_LIST = ['.DS_Store', 'node_modules/*', 'node_modules\\*', 'chcp.json', 'chcp.manifest', '.chcp*', '.gitignore', '.gitkeep', '.git', 'package.json'];
 
   module.exports = {
     context: context
@@ -46,7 +46,7 @@
     }
 
     if (projectIgnore.length > 0) {
-      _.assign(this.__ignoredFiles, _.trim(projectIgnore).split(/\n/));
+      this.__ignoredFiles = this.__ignoredFiles.concat(_.trim(projectIgnore).split(/\n/));
     }
 
     return this.__ignoredFiles;

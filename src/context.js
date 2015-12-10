@@ -12,6 +12,7 @@
       'chcp.manifest',
       '.chcp*',
       '.gitignore',
+      '.gitkeep',
       '.git',
       'package.json'
     ];
@@ -54,7 +55,7 @@
     }
 
     if (projectIgnore.length > 0) {
-      _.assign(this.__ignoredFiles, _.trim(projectIgnore).split(/\n/));
+      this.__ignoredFiles = this.__ignoredFiles.concat(_.trim(projectIgnore).split(/\n/));
     }
 
     return this.__ignoredFiles;
