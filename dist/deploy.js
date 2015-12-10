@@ -56,6 +56,9 @@
       process.exit(0);
     }
 
+    ignore = ignore.filter(function (ignoredFile) {
+      return !ignoredFile.match(/^chcp/);
+    });
     ignore = ignore.map(function (ignoredFile) {
       return '!' + ignoredFile;
     });
