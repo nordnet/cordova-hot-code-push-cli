@@ -67,6 +67,7 @@
       secret: credentials.secret,
       region: config.s3region,
       bucket: config.s3bucket,
+      prefix: config.s3prefix,
       acl: 'public-read',
       headers: {
         CacheControl: 'no-cache, no-store, must-revalidate',
