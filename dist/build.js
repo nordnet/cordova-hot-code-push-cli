@@ -28,6 +28,9 @@
       var hashQueue = prepareFilesHashQueue(files);
 
       async.parallelLimit(hashQueue, 10, function (err, result) {
+        result.sort(function (a, b) {
+          return a.file.localeCompare(b.file);
+        });
         var json = JSON.stringify(result, null, 2);
         var manifestFile = chcpContext.manifestFilePath;
 
