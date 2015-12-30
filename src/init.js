@@ -30,6 +30,11 @@ const s3region = {
   message: 'Must be one of: us-east-1, us-west-2, us-west-1, eu-west-1, eu-central-1, ap-southeast-1, ap-southeast-2, ap-northeast-1, sa-east-1',
 };
 
+const s3dir = {
+  description: 'Amazon S3 Bucket subdirectory (optional for cordova-hcp deploy)',
+  pattern: /^[a-zA-Z\-\s0-9]+$/,
+};
+
 const iosIdentifier = {
   description: 'IOS app identifier',
   pattern: /^[a-zA-Z\-0-9\.]+$/,
@@ -53,6 +58,7 @@ const schema = {
     name,
     s3bucket,
     s3region,
+    s3dir,
     ios_identifier: iosIdentifier,
     android_identifier: androidIdentifier,
     update,
@@ -94,17 +100,18 @@ function validateBucket(result) {
   return result;
 }
 
-function getUrl({ s3region: region, s3bucket: bucket }) {
+function getUrl({ s3region: region, s3bucket: bucket, s3dir: dir }) {
   if (!bucket) {
     return getInput(prompt, urlSchema);
   }
 
-  return { content_url: getContentUrl(region, bucket) };
+  return { content_url: getContentUrl(region, bucket, dir) };
 }
 
-function getContentUrl(region, bucket) {
+function getContentUrl(region, bucket, dir) {
   const url = region === 'us-east-1' ? 's3.amazonaws.com' : `s3-${region}.amazonaws.com`;
-  return `https://${url}/${bucket}`;
+  if(dir) dir = '/' + dir;
+  return `https://${url}/${bucket}` + dir;
 }
 
 function done(err) {
