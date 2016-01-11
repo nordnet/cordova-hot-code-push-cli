@@ -76,7 +76,7 @@
       return build(chcpContext);
     });
 
-    funcs.push(function(){
+    funcs.push(function(config){
       if (disablePublicTunnel) {
         updateLocalEnv({ content_url: config.content_url })
       }
