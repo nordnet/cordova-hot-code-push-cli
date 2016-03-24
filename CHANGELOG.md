@@ -1,20 +1,24 @@
 # Change Log
 
+## 1.0.4 (2016-03-24)
+
+- Merged [pull request #48](https://github.com/nordnet/cordova-hot-code-push-cli/pull/48). Fixes problem with the ngrok server not starting. Thanks to [@happy-dev](https://github.com/happy-dev).
+
 ## 1.0.3 (2015-12-3)
 
 **Bug fixes:**
 
-* Fixed [issue #16](https://github.com/nordnet/cordova-hot-code-push-cli/issues/16).
-* Fixed [issue #18](https://github.com/nordnet/cordova-hot-code-push-cli/issues/18).
-* Fixed [issue #17](https://github.com/nordnet/cordova-hot-code-push-cli/issues/17).
+- Fixed [issue #16](https://github.com/nordnet/cordova-hot-code-push-cli/issues/16).
+- Fixed [issue #18](https://github.com/nordnet/cordova-hot-code-push-cli/issues/18).
+- Fixed [issue #17](https://github.com/nordnet/cordova-hot-code-push-cli/issues/17).
 
 **Enchancements:**
 
-* Merged [pull request #21](https://github.com/nordnet/cordova-hot-code-push-cli/pull/21). Thanks to [@andreialecu](https://github.com/andreialecu) build can be deployed to frankfurt aws region.
+- Merged [pull request #21](https://github.com/nordnet/cordova-hot-code-push-cli/pull/21). Thanks to [@andreialecu](https://github.com/andreialecu) build can be deployed to frankfurt aws region.
 
 **Docs:**
 
-* Added `Default configuration file` section in the readme.
+- Added `Default configuration file` section in the readme.
 
 ## 1.0.2 (2015-10-26)
 
