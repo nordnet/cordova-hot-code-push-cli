@@ -34,7 +34,7 @@
 
   function execute(context) {
     chcpContext = context;
-    ignoredFiles = context.ignoredFiles();
+    ignoredFiles = context.ignoredFiles;
     chcpContext.argv.localdev = true;
     sourceDirectory = chcpContext.sourceDirectory;
 

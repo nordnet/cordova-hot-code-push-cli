@@ -29,10 +29,10 @@
     var executeDfd = Q.defer(),
         config,
         credentials,
-        ignore = context.ignoredFiles();
+        ignore = context.ignoredFiles;
 
     try {
-      config = fs.readFileSync(context.defaultConfig, 'utf-8');
+      config = fs.readFileSync(context.defaultConfig, 'utf8');
       config = JSON.parse(config);
     } catch(e) {
       console.log('Cannot parse cordova-hcp.json. Did you run cordova-hcp init?');
@@ -44,7 +44,7 @@
       process.exit(0);
     }
     try {
-      credentials = fs.readFileSync(loginFile, 'utf-8');
+      credentials = fs.readFileSync(loginFile, 'utf8');
       credentials = JSON.parse(credentials);
     } catch(e) {
       console.log('Cannot parse .chcplogin: ', e);

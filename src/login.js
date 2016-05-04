@@ -39,7 +39,7 @@ function validateConfig() {
   let config;
 
   try {
-    config = fs.readFileSync(configFile);
+    config = fs.readFileSync(configFile, 'utf8');
   } catch(e) {
     console.log('Cannot parse cordova-hcp.json. Did you run cordova-hcp init?');
     process.exit(0);

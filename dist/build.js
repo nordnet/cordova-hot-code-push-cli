@@ -22,7 +22,7 @@
 
     var executeDfd = Q.defer(),
         config = prepareConfig(context),
-        ignore = context.ignoredFiles();
+        ignore = context.ignoredFiles;
 
     recursive(chcpContext.sourceDirectory, ignore, function (err, files) {
       var hashQueue = prepareFilesHashQueue(files);
@@ -73,9 +73,7 @@
     var config = {};
 
     try {
-      config = fs.readFileSync(context.defaultConfig, {
-        encoding: 'utf-8'
-      });
+      config = fs.readFileSync(context.defaultConfig, 'utf8');
       config = JSON.parse(config);
       config.release = process.env.VERSION || calculateTimestamp();
 
