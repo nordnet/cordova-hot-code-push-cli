@@ -2,11 +2,13 @@
 
 (function () {
 
-  var path = require('path'),
-      fs = require('fs-extra'),
-      _ = require('lodash'),
-      ignoreFilePath = path.join(process.cwd(), '.chcpignore'),
-      DEFAULT_IGNORE_LIST = ['.DS_Store', 'node_modules/*', 'node_modules\\*', 'chcp.json', 'chcp.manifest', '.chcp*', '.gitignore', '.gitkeep', '.git', 'package.json'];
+  var path = require('path');
+  var fs = require('fs-extra');
+  var _ = require('lodash');
+  var IGNORED_FILES_CONFIG_PATH = path.join(process.cwd(), '.chcpignore');
+  var DEFAULT_WWW_FOLDER = path.join(process.cwd(), 'www');
+  var DEFAULT_CLI_CONFIG = path.join(process.cwd(), 'cordova-hcp.json');
+  var DEFAULT_IGNORE_LIST = ['.DS_Store', 'node_modules/*', 'node_modules\\*', 'chcp.json', 'chcp.manifest', '.chcp*', '.gitignore', '.gitkeep', '.git', 'package.json'];
 
   module.exports = {
     context: context
@@ -17,49 +19,37 @@
   }
 
   var Context = function Context(argv) {
-    if (argv) {
-      this.argv = argv;
-    } else {
-      this.argv = {};
-    }
-
-    this.defaultConfig = path.join(process.cwd(), 'cordova-hcp.json');
+    this.argv = argv ? argv : {};
+    this.defaultConfig = DEFAULT_CLI_CONFIG;
     this.sourceDirectory = getSourceDirectory(argv);
     this.manifestFilePath = path.join(this.sourceDirectory, 'chcp.manifest');
     this.projectsConfigFilePath = path.join(this.sourceDirectory, 'chcp.json');
-  };
-
-  Context.prototype.ignoredFiles = function () {
-    if (this.__ignoredFiles) {
-      return this.__ignoredFiles;
-    }
-
-    this.__ignoredFiles = DEFAULT_IGNORE_LIST;
-    var projectIgnore = '';
-
-    try {
-      projectIgnore = fs.readFileSync(ignoreFilePath, {
-        encoding: 'utf-8'
-      });
-    } catch (e) {
-      console.log('Warning: .chcpignore does not exist. Using default ignore preferences.');
-    }
-
-    if (projectIgnore.length > 0) {
-      this.__ignoredFiles = this.__ignoredFiles.concat(_.trim(projectIgnore).split(/\n/));
-    }
-
-    return this.__ignoredFiles;
+    this.ignoredFiles = getIgnoredFiles();
   };
 
   function getSourceDirectory(argv) {
-    var defaultDir = path.join(process.cwd(), 'www'),
-        consoleArgs = argv._;
-
+    var consoleArgs = argv._;
     if (!consoleArgs || consoleArgs.length !== 2) {
-      return defaultDir;
+      return DEFAULT_WWW_FOLDER;
     }
 
     return path.join(process.cwd(), consoleArgs[1]);
+  }
+
+  function getIgnoredFiles() {
+    var projectIgnore = readIgnoredFilesProjectConfig(IGNORED_FILES_CONFIG_PATH);
+
+    return _.union(DEFAULT_IGNORE_LIST, projectIgnore);
+  }
+
+  function readIgnoredFilesProjectConfig(pathToConfig) {
+    var fileContent;
+    try {
+      fileContent = fs.readFileSync(pathToConfig, 'utf8');
+    } catch (e) {
+      return [];
+    }
+
+    return _.trim(fileContent).split(/\n/);
   }
 })();
