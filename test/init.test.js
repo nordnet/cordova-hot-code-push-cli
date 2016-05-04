@@ -6,6 +6,7 @@ const withBucket = {
   name: 'name',
   s3region: 'us-east-1',
   s3bucket: 'bucket',
+  prefix: 'pre/fix/',
   ios_identifier: 'ios',
   android_identifier: 'android',
   update: 'resume',
@@ -19,10 +20,11 @@ const expectedContentWithBucket = {
   name: 'name',
   s3region: 'us-east-1',
   s3bucket: 'bucket',
+  prefix: 'pre/fix/',
   ios_identifier: 'ios',
   android_identifier: 'android',
   update: 'resume',
-  content_url: 'https://s3.amazonaws.com/bucket'
+  content_url: 'https://s3.amazonaws.com/bucket/pre/fix/'
 };
 
 describe('init', () => {
@@ -51,10 +53,11 @@ describe('init', () => {
         "name": "name",
         "s3region": "us-east-1",
         "s3bucket": "bucket",
+        "prefix": "pre/fix/",
         "ios_identifier": "ios",
         "android_identifier": "android",
         "update": "resume",
-        "content_url": "https://s3.amazonaws.com/bucket"
+        "content_url": "https://s3.amazonaws.com/bucket/pre/fix/"
       };
 
       var content = JSON.parse(writeFile.args[0][1]);
