@@ -38,8 +38,14 @@
 
   function getIgnoredFiles() {
     var projectIgnore = readIgnoredFilesProjectConfig(IGNORED_FILES_CONFIG_PATH);
+    var ignoredList = _.union(DEFAULT_IGNORE_LIST, projectIgnore);
 
-    return _.union(DEFAULT_IGNORE_LIST, projectIgnore);
+    // remove comments and empty items
+    _.remove(ignoredList, function (item) {
+      return item.indexOf('#') === 0 || _.trim(item).length === 0;
+    });
+
+    return ignoredList;
   }
 
   function readIgnoredFilesProjectConfig(pathToConfig) {
