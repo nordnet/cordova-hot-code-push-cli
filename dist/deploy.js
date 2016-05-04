@@ -30,7 +30,8 @@
   function deploy(context) {
     var executeDfd = Q.defer(),
         config,
-        credentials;
+        credentials,
+        ignore = context.ignoredFiles();
 
     try {
       config = fs.readFileSync(context.defaultConfig, 'utf-8');
@@ -55,11 +56,20 @@
       process.exit(0);
     }
 
+    ignore = ignore.filter(function (ignoredFile) {
+      return !ignoredFile.match(/^chcp/);
+    });
+    ignore = ignore.map(function (ignoredFile) {
+      return '!' + ignoredFile;
+    });
+
     // console.log('Credentials: ', credentials);
     // console.log('Config: ', config);
+    // console.log('Ignore: ', ignore);
 
     var files = readdirp({
-      root: context.sourceDirectory
+      root: context.sourceDirectory,
+      fileFilter: ignore
     });
 
     var uploader = s3sync({
