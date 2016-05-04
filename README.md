@@ -295,6 +295,16 @@ libs/*
 ```
 As a result, those files will be excluded from the `chcp.manifest`, and ignored by the `server` in local development mode.
 
+If you want - you can add comments by using `#` like this:
+
+```
+# Ignore libraries
+libs/*
+
+# Ignore images
+images/*
+```
+
 ### Normal workflow scheme
 
 1. Initialize:
