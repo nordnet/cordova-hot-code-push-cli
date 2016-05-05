@@ -1,6 +1,10 @@
 # Change Log
 
-## 1.1.0
+## 1.1.1 (2016-05-05)
+
+- Removed unused dependency from the `package.json`.
+
+## 1.1.0 (2016-05-04)
 
 **Bug fixes:**
 
