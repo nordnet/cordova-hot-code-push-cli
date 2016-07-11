@@ -9,6 +9,7 @@
       express = require('express'),
       app = express(),
       assetPort = process.env.PORT || 31284,
+      disablePublicTunnel = process.env.DISABLE_PUBLIC_TUNNEL || false,
       compression = require('compression'),
       build = require('./build.js').execute,
       minimatch = require('minimatch'),
@@ -42,14 +43,18 @@
       funcs = [];
 
     funcs.push(function(){
+      if (disablePublicTunnel)
+        return;
       return publicTunnel(assetPort);
     });
 
     funcs.push(function(content_url) {
       var dfd = Q.defer();
 
-      opts.content_url = content_url;
-      chcpContext.argv.content_url = content_url;
+      if (!disablePublicTunnel) {
+        opts.content_url = content_url;
+        chcpContext.argv.content_url = content_url;
+      }
 
       dfd.resolve();
       return dfd.promise;
@@ -71,9 +76,12 @@
       return build(chcpContext);
     });
 
-    funcs.push(function(){
-      console.log('cordova-hcp local server available at: '+ opts.local_url);
-      console.log('cordova-hcp public server available at: ' + opts.content_url);
+    funcs.push(function(config){
+      if (disablePublicTunnel) {
+        updateLocalEnv({ content_url: config.content_url })
+      }
+      console.log('cordova-hcp local server available at: ' + opts.local_url);
+      console.log('cordova-hcp public server available at: ' + config.content_url);
     });
 
     return funcs.reduce(Q.when, Q('initial'));
