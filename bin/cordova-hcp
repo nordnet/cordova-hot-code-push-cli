@@ -1,7 +1,7 @@
 #! /usr/bin/env node
-var path = require('path'),
-    argv = require('yargs').argv,
-    chcpContext = require(path.resolve(__dirname, '..', 'dist', 'context.js'));
+var path = require('path');
+var argv = require('yargs').argv;
+var chcpContext = require(path.resolve(__dirname, '..', 'dist', 'context.js'));
 
 var cmd = argv._[0];
 switch(cmd) {
@@ -11,8 +11,8 @@ switch(cmd) {
   case 'server':
   case 'deploy':
     console.log('Running ' + cmd);
-    var command = require(path.resolve(__dirname, '..', 'dist', cmd + '.js')),
-      context = chcpContext.context(argv);
+    var command = require(path.resolve(__dirname, '..', 'dist', cmd + '.js'));
+    var context = chcpContext(argv);
     command.execute(context);
     break;
   default:

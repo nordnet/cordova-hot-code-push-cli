@@ -1,70 +1,63 @@
-(function() {
+import path from 'path';
+import fs from 'fs';
+import _ from 'lodash';
 
-  var path = require('path');
-  var fs = require('fs-extra');
-  var _ = require('lodash');
-  var IGNORED_FILES_CONFIG_PATH = path.join(process.cwd(), '.chcpignore');
-  var DEFAULT_WWW_FOLDER = path.join(process.cwd(), 'www');
-  var DEFAULT_CLI_CONFIG = path.join(process.cwd(), 'cordova-hcp.json');
-  var DEFAULT_IGNORE_LIST = [
-      '.DS_Store',
-      'node_modules/*',
-      'node_modules\\*',
-      'chcp.json',
-      'chcp.manifest',
-      '.chcp*',
-      '.gitignore',
-      '.gitkeep',
-      '.git',
-      'package.json'];
+const cwd = process.cwd();
+const IGNORED_FILES_CONFIG_PATH = path.join(cwd, '.chcpignore');
+const DEFAULT_WWW_FOLDER = path.join(cwd, 'www');
+const DEFAULT_CLI_CONFIG = path.join(cwd, 'cordova-hcp.json');
+const DEFAULT_IGNORE_LIST = [
+  '.DS_Store',
+  'node_modules/*',
+  'node_modules\\*',
+  'chcp.json',
+  'chcp.manifest',
+  '.chcp*',
+  '.gitignore',
+  '.gitkeep',
+  '.git',
+  'package.json'
+];
+const CHCP_MANIFEST_FILE_NAME = 'chcp.manifest';
+const CHCP_CONFIG_FILE_NAME = 'chcp.json';
 
-  module.exports = {
-    context : context
+const sourcesDirectory = (argv) => {
+  const consoleArgs = argv._;
+  if (!consoleArgs || consoleArgs.length !== 2) {
+    return DEFAULT_WWW_FOLDER;
+  }
+
+  return path.join(cwd, consoleArgs[1]);
+}
+
+const ignoredFiles = () => {
+  return readIgnoredFilesProjectConfig(IGNORED_FILES_CONFIG_PATH).concat(DEFAULT_IGNORE_LIST).filter(noComments);
+}
+
+const noComments = (item) => {
+  return item.trim().length > 0 && item.indexOf('#') !== 0;
+}
+
+const readIgnoredFilesProjectConfig = (pathToConfig) => {
+  try {
+    return fs.readFileSync(pathToConfig, 'utf8').trim().split(/\n/);
+  } catch (e) {
+    return [];
+  }
+}
+
+module.exports = (argv) => {
+  const args = argv || {};
+  const wwwDir = sourcesDirectory(args);
+  const manifestFilePath = path.join(wwwDir, CHCP_MANIFEST_FILE_NAME);
+  const projectsConfigFilePath = path.join(wwwDir, CHCP_CONFIG_FILE_NAME);
+
+  return {
+    argv: args,
+    defaultConfig: DEFAULT_CLI_CONFIG,
+    sourceDirectory: wwwDir,
+    manifestFilePath: manifestFilePath,
+    projectsConfigFilePath: projectsConfigFilePath,
+    ignoredFiles: ignoredFiles()
   };
-
-  function context(argv) {
-    return new Context(argv);
-  }
-
-  var Context = function(argv) {
-    this.argv = argv ? argv : {};
-    this.defaultConfig = DEFAULT_CLI_CONFIG;
-    this.sourceDirectory = getSourceDirectory(argv);
-    this.manifestFilePath = path.join(this.sourceDirectory, 'chcp.manifest');
-    this.projectsConfigFilePath = path.join(this.sourceDirectory, 'chcp.json');
-    this.ignoredFiles = getIgnoredFiles();
-  };
-
-  function getSourceDirectory(argv) {
-    var consoleArgs = argv._;
-    if (!consoleArgs || consoleArgs.length !== 2) {
-      return DEFAULT_WWW_FOLDER;
-    }
-
-    return path.join(process.cwd(), consoleArgs[1]);
-  }
-
-  function getIgnoredFiles() {
-    var projectIgnore = readIgnoredFilesProjectConfig(IGNORED_FILES_CONFIG_PATH);
-    var ignoredList = _.union(DEFAULT_IGNORE_LIST, projectIgnore);
-
-    // remove comments and empty items
-    _.remove(ignoredList, function(item) {
-      return item.indexOf('#') === 0 || _.trim(item).length === 0;
-    });
-
-    return ignoredList;
-  }
-
-  function readIgnoredFilesProjectConfig(pathToConfig) {
-    var fileContent;
-    try {
-      fileContent = fs.readFileSync(pathToConfig, 'utf8');
-    } catch (e) {
-      return [];
-    }
-
-    return _.trim(fileContent).split(/\n/);
-  }
-
-})();
+};
