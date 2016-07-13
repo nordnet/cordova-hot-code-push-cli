@@ -1,11 +1,9 @@
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.execute = execute;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 var _path = require('path');
 
@@ -21,8 +19,10 @@ var _fs2 = _interopRequireDefault(_fs);
 
 var _utils = require('./utils');
 
-var configFile = _path2['default'].join(process.cwd(), 'cordova-hcp.json');
-var loginFile = _path2['default'].join(process.cwd(), '.chcplogin');
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var configFile = _path2.default.join(process.cwd(), 'cordova-hcp.json');
+var loginFile = _path2.default.join(process.cwd(), '.chcplogin');
 
 var schema = {
   properties: {
@@ -42,21 +42,21 @@ var schema = {
 function execute(context) {
   validateConfig();
 
-  _prompt2['default'].override = context.argv;
-  _prompt2['default'].message = 'Please provide';
-  _prompt2['default'].delimiter = ': ';
-  _prompt2['default'].start();
+  _prompt2.default.override = context.argv;
+  _prompt2.default.message = 'Please provide';
+  _prompt2.default.delimiter = ': ';
+  _prompt2.default.start();
 
-  (0, _utils.getInput)(_prompt2['default'], schema).then(function (content) {
+  (0, _utils.getInput)(_prompt2.default, schema).then(function (content) {
     return (0, _utils.writeFile)(loginFile, content);
   }).then(done);
 }
 
 function validateConfig() {
-  var config = undefined;
+  var config = void 0;
 
   try {
-    config = _fs2['default'].readFileSync(configFile, 'utf8');
+    config = _fs2.default.readFileSync(configFile, 'utf8');
   } catch (e) {
     console.log('Cannot parse cordova-hcp.json. Did you run cordova-hcp init?');
     process.exit(0);
@@ -78,3 +78,4 @@ function done(err) {
   console.log('You SHOULD add .chcplogin to your .gitignore');
   console.log('( echo \'.chcplogin\' >> .gitignore )');
 }
+//# sourceMappingURL=login.js.map

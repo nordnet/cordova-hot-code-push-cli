@@ -1,5 +1,7 @@
 'use strict';
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
 (function () {
   var path = require('path'),
       envFile = path.join(process.cwd(), '.chcpenv'),
@@ -127,12 +129,12 @@
     // Monitor for file changes
     console.log('Checking: ', sourceDirectory);
     watch.watchTree(sourceDirectory, { filter: fileChangeFilter }, function (f, curr, prev) {
-      if (typeof f == "object" && prev === null && curr === null) {
+      if ((typeof f === 'undefined' ? 'undefined' : _typeof(f)) == "object" && prev === null && curr === null) {
         // Finished walking the tree
         // console.log('Finished');
       } else {
-          handleFileChange(f);
-        }
+        handleFileChange(f);
+      }
     });
   }
 
@@ -163,7 +165,7 @@
     // Static assets
     app.use(compression());
     app.enable('view cache');
-    app.use('/', express['static'](sourceDirectory, { maxAge: 0 }));
+    app.use('/', express.static(sourceDirectory, { maxAge: 0 }));
   }
 
   function killCaches(ass) {
@@ -194,3 +196,4 @@
     return publicTunnelDfd.promise;
   }
 })();
+//# sourceMappingURL=server.js.map
