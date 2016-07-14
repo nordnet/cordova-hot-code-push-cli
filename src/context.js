@@ -1,6 +1,5 @@
 import path from 'path';
 import fs from 'fs';
-import _ from 'lodash';
 
 const cwd = process.cwd();
 const IGNORED_FILES_CONFIG_PATH = path.join(cwd, '.chcpignore');
