@@ -1,5 +1,9 @@
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _path = require('path');
 
 var _path2 = _interopRequireDefault(_path);
@@ -47,7 +51,7 @@ var readIgnoredFilesProjectConfig = function readIgnoredFilesProjectConfig(pathT
   }
 };
 
-module.exports = function (argv) {
+var context = function context(argv) {
   var args = argv || {};
   var wwwDir = sourcesDirectory(args);
   var manifestFilePath = _path2.default.join(wwwDir, CHCP_MANIFEST_FILE_NAME);
@@ -62,4 +66,7 @@ module.exports = function (argv) {
     ignoredFiles: ignoredFiles()
   };
 };
+
+exports.default = context;
+module.exports = exports['default'];
 //# sourceMappingURL=context.js.map

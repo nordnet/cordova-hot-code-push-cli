@@ -46,7 +46,7 @@ const readIgnoredFilesProjectConfig = (pathToConfig) => {
   }
 }
 
-module.exports = (argv) => {
+const context = (argv) => {
   const args = argv || {};
   const wwwDir = sourcesDirectory(args);
   const manifestFilePath = path.join(wwwDir, CHCP_MANIFEST_FILE_NAME);
@@ -60,4 +60,6 @@ module.exports = (argv) => {
     projectsConfigFilePath: projectsConfigFilePath,
     ignoredFiles: ignoredFiles()
   };
-};
+}
+
+export default context;
