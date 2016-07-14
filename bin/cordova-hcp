@@ -11,11 +11,17 @@ switch(cmd) {
   case 'server':
   case 'deploy':
     console.log('Running ' + cmd);
-    var command = require(path.resolve(__dirname, '..', 'dist', cmd + '.js'));
-    var context = chcpContext(argv);
-    command.execute(context);
+    executeCmd(cmd, argv);
     break;
   default:
     console.log('TODO: Should print usage instructions.');
     process.exit(0);
+}
+
+function executeCmd(cmd, argv) {
+  var pathToExecutor = path.resolve(__dirname, '..', 'dist', cmd + '.js');
+  var execute = require(pathToExecutor);
+  var context = chcpContext(argv);
+  
+  execute(context);
 }
