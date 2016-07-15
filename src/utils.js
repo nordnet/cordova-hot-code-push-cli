@@ -2,11 +2,21 @@ import pify from 'pify';
 import _fs from 'fs';
 import recursive from 'recursive-readdir';
 import hidefile from 'hidefile';
+import prompt from 'prompt';
 
 const fs = pify(_fs);
 
-const getInput = (prompt, props) => {
-  return new Promise(resolve => prompt.get(props, (err, result) => resolve(result, err)));
+// const getInput = (prompt, props) => {
+//   return new Promise(resolve => prompt.get(props, (err, result) => resolve(result, err)));
+// };
+
+const getInput = (schema, argv) => {
+  prompt.override = argv;
+  prompt.message = 'Please provide';
+  prompt.delimiter = ': ';
+  prompt.start();
+
+  return pify(prompt).get(schema);
 };
 
 const readFile = (file) => {

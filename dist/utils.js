@@ -20,16 +20,25 @@ var _hidefile = require('hidefile');
 
 var _hidefile2 = _interopRequireDefault(_hidefile);
 
+var _prompt = require('prompt');
+
+var _prompt2 = _interopRequireDefault(_prompt);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var fs = (0, _pify2.default)(_fs3.default);
 
-var getInput = function getInput(prompt, props) {
-  return new Promise(function (resolve) {
-    return prompt.get(props, function (err, result) {
-      return resolve(result, err);
-    });
-  });
+// const getInput = (prompt, props) => {
+//   return new Promise(resolve => prompt.get(props, (err, result) => resolve(result, err)));
+// };
+
+var getInput = function getInput(schema, argv) {
+  _prompt2.default.override = argv;
+  _prompt2.default.message = 'Please provide';
+  _prompt2.default.delimiter = ': ';
+  _prompt2.default.start();
+
+  return (0, _pify2.default)(_prompt2.default).get(schema);
 };
 
 var readFile = function readFile(file) {
