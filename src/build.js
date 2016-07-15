@@ -50,7 +50,7 @@ const saveConfig = (config, context) => {
 };
 
 const done = (config, context) => {
-  console.log('Build with release version ' + config.release + ' created in ' + context.sourceDirectory);
+  console.log(`Build with release version ${config.release} created in ${context.sourceDirectory}`);
 };
 
 const readSourceDir = (context) => {
