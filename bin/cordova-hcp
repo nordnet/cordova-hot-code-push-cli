@@ -1,7 +1,7 @@
 #! /usr/bin/env node
 var path = require('path');
 var argv = require('yargs').argv;
-var chcpContext = require(path.resolve(__dirname, '..', 'dist', 'context.js'));
+var chcpContext = require(path.resolve(__dirname, '..', 'dist', 'context'));
 
 var cmd = argv._[0];
 switch(cmd) {
@@ -19,9 +19,9 @@ switch(cmd) {
 }
 
 function executeCmd(cmd, argv) {
-  var pathToExecutor = path.resolve(__dirname, '..', 'dist', cmd + '.js');
+  var pathToExecutor = path.resolve(__dirname, '..', 'dist', cmd);
   var execute = require(pathToExecutor);
   var context = chcpContext(argv);
-  
+
   execute(context);
 }

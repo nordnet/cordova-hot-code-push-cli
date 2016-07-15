@@ -196,4 +196,4 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     return publicTunnelDfd.promise;
   }
 })();
-//# sourceMappingURL=server.js.map
+//# sourceMappingURL=index.js.map

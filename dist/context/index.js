@@ -65,4 +65,4 @@ var context = function context(argv) {
 
 exports.default = context;
 module.exports = exports['default'];
-//# sourceMappingURL=context.js.map
+//# sourceMappingURL=index.js.map

@@ -12,7 +12,7 @@ var _md5File = require('md5-file');
 
 var _md5File2 = _interopRequireDefault(_md5File);
 
-var _utils = require('./utils');
+var _utils = require('../utils');
 
 var _utils2 = _interopRequireDefault(_utils);
 
@@ -93,4 +93,4 @@ var execute = function execute(context) {
 
 exports.default = execute;
 module.exports = exports['default'];
-//# sourceMappingURL=build.js.map
+//# sourceMappingURL=index.js.map

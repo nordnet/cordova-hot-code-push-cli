@@ -8,7 +8,7 @@ var _path = require('path');
 
 var _path2 = _interopRequireDefault(_path);
 
-var _utils = require('./utils');
+var _utils = require('../utils');
 
 var _utils2 = _interopRequireDefault(_utils);
 
@@ -43,4 +43,4 @@ var execute = function execute(context) {
 
 exports.default = execute;
 module.exports = exports['default'];
-//# sourceMappingURL=login.js.map
+//# sourceMappingURL=index.js.map

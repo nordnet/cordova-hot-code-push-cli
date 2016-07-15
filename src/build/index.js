@@ -1,6 +1,6 @@
 import path from 'path';
 import md5File from 'md5-file';
-import utils from './utils';
+import utils from '../utils';
 
 const backslashRegexp = new RegExp("\\\\", "g");
 

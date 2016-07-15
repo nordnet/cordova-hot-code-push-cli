@@ -1,5 +1,5 @@
 import path from 'path';
-import utils from './utils';
+import utils from '../utils';
 
 const loginFile = path.join(process.cwd(), '.chcplogin');
 
