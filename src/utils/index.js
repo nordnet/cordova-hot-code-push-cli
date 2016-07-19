@@ -6,10 +6,6 @@ import prompt from 'prompt';
 
 const fs = pify(_fs);
 
-// const getInput = (prompt, props) => {
-//   return new Promise(resolve => prompt.get(props, (err, result) => resolve(result, err)));
-// };
-
 const getInput = (schema, argv) => {
   prompt.override = argv;
   prompt.message = 'Please provide';

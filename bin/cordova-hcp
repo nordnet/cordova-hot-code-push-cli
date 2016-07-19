@@ -1,21 +1,20 @@
 #! /usr/bin/env node
+
 var path = require('path');
 var argv = require('yargs').argv;
 var chcpContext = require(path.resolve(__dirname, '..', 'dist', 'context'));
 
 var cmd = argv._[0];
-switch(cmd) {
+switch (cmd) {
   case 'build':
   case 'login':
   case 'init':
   case 'server':
   case 'deploy':
-    console.log('Running ' + cmd);
-    executeCmd(cmd, argv);
-    break;
+    return executeCmd(cmd, argv);
   default:
     console.log('TODO: Should print usage instructions.');
-    process.exit(0);
+    process.exitCode = 0;
 }
 
 function executeCmd(cmd, argv) {
@@ -23,5 +22,7 @@ function executeCmd(cmd, argv) {
   var execute = require(pathToExecutor);
   var context = chcpContext(argv);
 
-  execute(context);
+  return execute(context).catch(function(err) {
+      console.log(err.stack);
+    });
 }

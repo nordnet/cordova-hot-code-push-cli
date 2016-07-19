@@ -28,10 +28,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var fs = (0, _pify2.default)(_fs3.default);
 
-// const getInput = (prompt, props) => {
-//   return new Promise(resolve => prompt.get(props, (err, result) => resolve(result, err)));
-// };
-
 var getInput = function getInput(schema, argv) {
   _prompt2.default.override = argv;
   _prompt2.default.message = 'Please provide';
