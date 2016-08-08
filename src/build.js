@@ -23,7 +23,8 @@
       ignore = context.ignoredFiles;
 
     recursive(chcpContext.sourceDirectory, ignore, function(err, files) {
-      var hashQueue = prepareFilesHashQueue(files);
+      var hashAlgorithm = config.hash_algorithm || 'md5';
+      var hashQueue = prepareFilesHashQueue(files, hashAlgorithm);
 
       async.parallelLimit(hashQueue, 10, function(err, result) {
         result.sort((a, b) => {
@@ -55,12 +56,12 @@
     return executeDfd.promise;
   }
 
-  function prepareFilesHashQueue(files) {
+  function prepareFilesHashQueue(files, hashAlgorithm) {
     var queue = [];
     for (var i in files) {
       var file = files[i];
       if (!hidefile.isHiddenSync(file)) {
-        queue.push(hashFile.bind(null, file));
+        queue.push(hashFile.bind(null, file, hashAlgorithm));
       }
     }
 
@@ -85,12 +86,16 @@
       config.content_url = context.argv.content_url;
     }
 
+    if (context.argv && context.argv.hash_algorithm) {
+      config.hash_algorithm = context.argv.hash_algorithm;
+    }
+
     console.log('Config', config);
     return config;
   }
 
-  function hashFile(filename, callback) {
-    var hash = crypto.createHash('md5'),
+  function hashFile(filename, hashAlgorithm, callback) {
+    var hash = crypto.createHash(hashAlgorithm),
       stream = fs.createReadStream(filename);
 
     //stream.pipe(writeStream);
@@ -100,7 +105,7 @@
     });
 
     stream.on('end', function() {
-      var result = hash.digest('hex'),
+      var result = (hashAlgorithm == 'md5' ? '' : ':'+hashAlgorithm+':') + hash.digest('hex'),
         file = path.relative(chcpContext.sourceDirectory, filename).replace(new RegExp("\\\\", "g"), "/");
 
       callback(null, {
