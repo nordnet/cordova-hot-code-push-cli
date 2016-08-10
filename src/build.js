@@ -162,7 +162,7 @@
       };
 
     } catch(e) {
-      console.log('Error with keyfile', signingPrivateKeyFile);
+      console.log('Error with keyfile', signingPrivateKeyFilePath);
       process.exit(1);
     }
 
