@@ -154,7 +154,7 @@
 
     try {
       var signingKey = fs.readFileSync(signingPrivateKeyFilePath, 'utf8');
-      var contentSignature = sign.sign(signingKey, 'hex');
+      var contentSignature = sign.sign(signingKey, 'base64');
 
       var signature = {
         'algorithm': signatureAlgorithm,

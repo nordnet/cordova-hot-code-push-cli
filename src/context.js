@@ -12,6 +12,7 @@
       'node_modules\\*',
       'chcp.json',
       'chcp.manifest',
+      'chcp.signature',
       '.chcp*',
       '.gitignore',
       '.gitkeep',
