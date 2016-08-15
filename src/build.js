@@ -23,12 +23,19 @@
       ignore = context.ignoredFiles;
 
     recursive(chcpContext.sourceDirectory, ignore, function(err, files) {
-      var hashQueue = prepareFilesHashQueue(files);
+      var hashQueue = prepareFilesHashQueue(files, config.hash_algorithm);
 
       async.parallelLimit(hashQueue, 10, function(err, result) {
         result.sort((a, b) => {
           return a.file.localeCompare(b.file)
         });
+
+        if (context.signingPrivateKeyFilePath) {
+          var signature = signManifest(result, context.signingPrivateKeyFilePath, config.signature_algorithm);
+          var signatureJson = JSON.stringify(signature, null, 2);
+          fs.writeFileSync(chcpContext.manifestSignatureFilePath, signatureJson);
+        }
+
         var json = JSON.stringify(result, null, 2);
         var manifestFile = chcpContext.manifestFilePath;
 
@@ -55,12 +62,12 @@
     return executeDfd.promise;
   }
 
-  function prepareFilesHashQueue(files) {
+  function prepareFilesHashQueue(files, hashAlgorithm) {
     var queue = [];
     for (var i in files) {
       var file = files[i];
       if (!hidefile.isHiddenSync(file)) {
-        queue.push(hashFile.bind(null, file));
+        queue.push(hashFile.bind(null, file, hashAlgorithm));
       }
     }
 
@@ -85,12 +92,28 @@
       config.content_url = context.argv.content_url;
     }
 
+    config.hash_algorithm = config.hash_algorithm || 'md5';
+    if (context.argv && context.argv.hash_algorithm) {
+      config.hash_algorithm = context.argv.hash_algorithm;
+    }
+
+    config.signature_algorithm = config.signature_algorithm || 'RSA-SHA256';
+    if (context.argv && context.argv.signature_algorithm) {
+      config.signature_algorithm = context.argv.signature_algorithm;
+    }
+
+    config.is_signed = false;
+    if (context.argv && context.argv.signing_private_key_file) {
+      context.signingPrivateKeyFilePath = context.argv.signing_private_key_file;
+      config.is_signed = true;
+    }
+
     console.log('Config', config);
     return config;
   }
 
-  function hashFile(filename, callback) {
-    var hash = crypto.createHash('md5'),
+  function hashFile(filename, hashAlgorithm, callback) {
+    var hash = crypto.createHash(hashAlgorithm),
       stream = fs.createReadStream(filename);
 
     //stream.pipe(writeStream);
@@ -100,7 +123,7 @@
     });
 
     stream.on('end', function() {
-      var result = hash.digest('hex'),
+      var result = (hashAlgorithm == 'md5' ? '' : ':'+hashAlgorithm+':') + hash.digest('hex'),
         file = path.relative(chcpContext.sourceDirectory, filename).replace(new RegExp("\\\\", "g"), "/");
 
       callback(null, {
@@ -118,5 +141,31 @@
       ((currentdate.getHours() < 10) ? '0' + currentdate.getHours() : currentdate.getHours()) + '.' +
       ((currentdate.getMinutes() < 10) ? '0' + currentdate.getMinutes() : currentdate.getMinutes()) + '.' +
       ((currentdate.getSeconds() < 10) ? '0' + currentdate.getSeconds() : currentdate.getSeconds());
+  }
+
+  function signManifest(content, signingPrivateKeyFilePath, signatureAlgorithm) {
+    var sign = crypto.createSign(signatureAlgorithm);
+    _.each(content, function(manifestFile) {
+      if (manifestFile.file && manifestFile.hash) {
+        sign.update(manifestFile.file, 'utf8');
+        sign.update(manifestFile.hash, 'utf8');
+      }
+    });
+
+    try {
+      var signingKey = fs.readFileSync(signingPrivateKeyFilePath, 'utf8');
+      var contentSignature = sign.sign(signingKey, 'base64');
+
+      var signature = {
+        'algorithm': signatureAlgorithm,
+        'contentSignature': contentSignature
+      };
+
+    } catch(e) {
+      console.log('Error with keyfile', signingPrivateKeyFilePath);
+      process.exit(1);
+    }
+
+    return signature;
   }
 })();

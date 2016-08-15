@@ -12,6 +12,7 @@
       'node_modules\\*',
       'chcp.json',
       'chcp.manifest',
+      'chcp.signature',
       '.chcp*',
       '.gitignore',
       '.gitkeep',
@@ -31,6 +32,7 @@
     this.defaultConfig = DEFAULT_CLI_CONFIG;
     this.sourceDirectory = getSourceDirectory(argv);
     this.manifestFilePath = path.join(this.sourceDirectory, 'chcp.manifest');
+    this.manifestSignatureFilePath = path.join(this.sourceDirectory, 'chcp.signature');
     this.projectsConfigFilePath = path.join(this.sourceDirectory, 'chcp.json');
     this.ignoredFiles = getIgnoredFiles();
   };
