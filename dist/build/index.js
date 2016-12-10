@@ -18,11 +18,7 @@ var _utils2 = _interopRequireDefault(_utils);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var backslashRegexp = new RegExp("\\\\", "g");
-
-var stringify = function stringify(json) {
-  return JSON.stringify(json, null, 2);
-};
+var backslashRegexp = new RegExp('\\\\', 'g'); /*eslint-disable */
 
 var generateReleaseVersionNumber = function generateReleaseVersionNumber() {
   return Math.floor(new Date() / 1000);
@@ -71,6 +67,8 @@ var saveConfig = function saveConfig(config, context) {
 
 var done = function done(config, context) {
   console.log('Build with release version ' + config.release + ' created in ' + context.sourceDirectory);
+
+  return config;
 };
 
 var readSourceDir = function readSourceDir(context) {
@@ -88,6 +86,8 @@ var execute = function execute(context) {
     return saveConfig(config, context);
   }).then(function (config) {
     return done(config, context);
+  }).then(function (config) {
+    return config;
   });
 };
 

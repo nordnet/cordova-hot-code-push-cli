@@ -1,5 +1,6 @@
 #! /usr/bin/env node
 
+/*eslint-disable */
 var path = require('path');
 var argv = require('yargs').argv;
 var chcpContext = require(path.resolve(__dirname, '..', 'dist', 'context'));
@@ -11,18 +12,20 @@ switch (cmd) {
   case 'init':
   case 'server':
   case 'deploy':
-    return executeCmd(cmd, argv);
+    executeCmd(cmd, argv);
+    break;
   default:
     console.log('TODO: Should print usage instructions.');
     process.exitCode = 0;
 }
 
-function executeCmd(cmd, argv) {
-  var pathToExecutor = path.resolve(__dirname, '..', 'dist', cmd);
+function executeCmd(command, argv) {
+  var pathToExecutor = path.resolve(__dirname, '..', 'dist', command);
   var execute = require(pathToExecutor);
   var context = chcpContext(argv);
 
   return execute(context).catch(function(err) {
-      console.log(err.stack);
-    });
+    console.log(err.stack);
+    process.exitCode = 0;
+  });
 }

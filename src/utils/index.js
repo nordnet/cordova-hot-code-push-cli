@@ -1,10 +1,11 @@
 import pify from 'pify';
 import _fs from 'fs';
-import recursive from 'recursive-readdir';
+import _recursive from 'recursive-readdir';
 import hidefile from 'hidefile';
 import prompt from 'prompt';
 
 const fs = pify(_fs);
+const recursive = pify(_recursive);
 
 const getInput = (schema, argv) => {
   prompt.override = argv;
@@ -15,36 +16,22 @@ const getInput = (schema, argv) => {
   return pify(prompt).get(schema);
 };
 
-const readFile = (file) => {
-  return fs.readFile(file, 'utf8').then(content => JSON.parse(content));
-};
+const readFile = file => fs.readFile(file, 'utf8').then(JSON.parse);
 
-const writeFile = (file, content) => {
-  const str = JSON.stringify(content, null, 2);
+const stringify = content => JSON.stringify(content, null, 2);
 
-  return fs.writeFile(file, str, 'utf8');
-}
+const writeFile = (file, content) => fs.writeFile(file, stringify(content), 'utf8');
 
-const nonHiddenFile = (file) => {
-  return !hidefile.isHiddenSync(file);
-}
+const nonHiddenFile = file => !hidefile.isHiddenSync(file);
 
-const readDir = (dir, ignoredFiles) => {
-  return new Promise((resolve, reject) => {
-      recursive(dir, ignoredFiles, (err, files) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(files);
-        }
-      });
-    })
-    .then(files => files.filter(nonHiddenFile));
-};
+const readDir = (dir, ignoredFiles) => recursive(dir, ignoredFiles)
+  .then(files => files.filter(nonHiddenFile));
 
-export default {
+const lib = {
   getInput,
   readFile,
   writeFile,
-  readDir
+  readDir,
 };
+
+export default lib;

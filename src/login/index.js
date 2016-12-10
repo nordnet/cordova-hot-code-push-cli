@@ -18,9 +18,7 @@ const schema = {
   },
 };
 
-const done = () => {
-  console.log('.chcplogin file created. Don\'t forget to add it to your .gitignore.');
-};
+const done = () => console.log('.chcplogin file created. Don\'t forget to add it to your .gitignore.');
 
 const execute = (context) => {
   utils.getInput(schema, context.argv)
