@@ -27,6 +27,7 @@ var _prompt2 = _interopRequireDefault(_prompt);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var fs = (0, _pify2.default)(_fs3.default);
+var recursive = (0, _pify2.default)(_recursiveReaddir2.default);
 
 var getInput = function getInput(schema, argv) {
   _prompt2.default.override = argv;
@@ -38,15 +39,15 @@ var getInput = function getInput(schema, argv) {
 };
 
 var readFile = function readFile(file) {
-  return fs.readFile(file, 'utf8').then(function (content) {
-    return JSON.parse(content);
-  });
+  return fs.readFile(file, 'utf8').then(JSON.parse);
+};
+
+var stringify = function stringify(content) {
+  return JSON.stringify(content, null, 2);
 };
 
 var writeFile = function writeFile(file, content) {
-  var str = JSON.stringify(content, null, 2);
-
-  return fs.writeFile(file, str, 'utf8');
+  return fs.writeFile(file, stringify(content), 'utf8');
 };
 
 var nonHiddenFile = function nonHiddenFile(file) {
@@ -54,24 +55,18 @@ var nonHiddenFile = function nonHiddenFile(file) {
 };
 
 var readDir = function readDir(dir, ignoredFiles) {
-  return new Promise(function (resolve, reject) {
-    (0, _recursiveReaddir2.default)(dir, ignoredFiles, function (err, files) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(files);
-      }
-    });
-  }).then(function (files) {
+  return recursive(dir, ignoredFiles).then(function (files) {
     return files.filter(nonHiddenFile);
   });
 };
 
-exports.default = {
+var lib = {
   getInput: getInput,
   readFile: readFile,
   writeFile: writeFile,
   readDir: readDir
 };
+
+exports.default = lib;
 module.exports = exports['default'];
 //# sourceMappingURL=index.js.map

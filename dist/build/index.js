@@ -18,7 +18,7 @@ var _utils2 = _interopRequireDefault(_utils);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var backslashRegexp = new RegExp('\\\\', 'g'); /*eslint-disable */
+var backslashRegexp = new RegExp('\\\\', 'g');
 
 var generateReleaseVersionNumber = function generateReleaseVersionNumber() {
   return Math.floor(new Date() / 1000);
@@ -86,8 +86,6 @@ var execute = function execute(context) {
     return saveConfig(config, context);
   }).then(function (config) {
     return done(config, context);
-  }).then(function (config) {
-    return config;
   });
 };
 

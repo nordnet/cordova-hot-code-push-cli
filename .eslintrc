@@ -11,7 +11,8 @@
   },
   "rules": {
     "no-use-before-define": [2, "nofunc"],
-    "comma-dangle": [2, "always-multiline"],
+    "comma-dangle": [2, "only-multiline"],
+    "max-len": ["error", 130],
     "block-scoped-var": 0 // TEMPORARY until issue in ESLint is fixed
   }
 }

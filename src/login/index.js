@@ -20,10 +20,8 @@ const schema = {
 
 const done = () => console.log('.chcplogin file created. Don\'t forget to add it to your .gitignore.');
 
-const execute = (context) => {
-  utils.getInput(schema, context.argv)
+const execute = context => utils.getInput(schema, context.argv)
     .then(content => utils.writeFile(loginFile, content))
     .then(done);
-};
 
 export default execute;

@@ -31,9 +31,13 @@ const sourcesDirectory = argv => {
 
 const noComments = item => item.trim().length > 0 && item.indexOf('#') !== 0;
 
-const readIgnoredFilesProjectConfig = pathToConfig => fs.readFile(pathToConfig, 'utf8')
-  .then(content => content.trim().split(/\n/))
-  .catch(_ => []);
+const readIgnoredFilesProjectConfig = pathToConfig => {
+  try {
+    return fs.readFileSync(pathToConfig, 'utf8').trim().split(/\n/);
+  } catch (err) {
+    return [];
+  }
+};
 
 const ignoredFiles = () => readIgnoredFilesProjectConfig(IGNORED_FILES_CONFIG_PATH)
   .concat(DEFAULT_IGNORE_LIST)

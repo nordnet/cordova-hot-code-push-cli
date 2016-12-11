@@ -32,11 +32,11 @@ var schema = {
 };
 
 var done = function done() {
-  console.log('.chcplogin file created. Don\'t forget to add it to your .gitignore.');
+  return console.log('.chcplogin file created. Don\'t forget to add it to your .gitignore.');
 };
 
 var execute = function execute(context) {
-  _utils2.default.getInput(schema, context.argv).then(function (content) {
+  return _utils2.default.getInput(schema, context.argv).then(function (content) {
     return _utils2.default.writeFile(loginFile, content);
   }).then(done);
 };

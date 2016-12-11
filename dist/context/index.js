@@ -31,10 +31,6 @@ var sourcesDirectory = function sourcesDirectory(argv) {
   return _path2.default.join(cwd, consoleArgs[1]);
 };
 
-var ignoredFiles = function ignoredFiles() {
-  return readIgnoredFilesProjectConfig(IGNORED_FILES_CONFIG_PATH).concat(DEFAULT_IGNORE_LIST).filter(noComments);
-};
-
 var noComments = function noComments(item) {
   return item.trim().length > 0 && item.indexOf('#') !== 0;
 };
@@ -42,9 +38,13 @@ var noComments = function noComments(item) {
 var readIgnoredFilesProjectConfig = function readIgnoredFilesProjectConfig(pathToConfig) {
   try {
     return _fs2.default.readFileSync(pathToConfig, 'utf8').trim().split(/\n/);
-  } catch (e) {
+  } catch (err) {
     return [];
   }
+};
+
+var ignoredFiles = function ignoredFiles() {
+  return readIgnoredFilesProjectConfig(IGNORED_FILES_CONFIG_PATH).concat(DEFAULT_IGNORE_LIST).filter(noComments);
 };
 
 var context = function context(argv) {
