@@ -19,7 +19,7 @@ const contentDir = {
 const contentConfig = {
   description: 'Application\'s config URL (skip, if it\'s in content\'s directory root)',
   ask: () => !prompt.history('isShortVersion').value,
-  before: (value) => {
+  before: value => {
     if (value) {
       return value;
     }
@@ -101,10 +101,12 @@ const schema = {
   }
 };
 
-const generateFullConfig = (input) => {
+const generateReleaseNumber = () => Math.floor(new Date() / 1000);
+
+const generateFullConfig = input => {
   const config = {
     release: {
-      version: '',
+      version: generateReleaseNumber(),
       compare: input.releaseVersionsCompare,
       min_native_interface: input.minNativeInterface
     },
@@ -128,44 +130,36 @@ const generateFullConfig = (input) => {
   };
 };
 
-const generateShortConfig = (input) => {
-  const config = {
-    release: '',
-    content: input.contentDir
-  };
-
+const generateShortConfig = input => {
   return {
-    config: config,
+    config: {
+      release: generateReleaseNumber(),
+      content: input.contentDir
+    },
     dst: input.pathToSourceDir
   };
 };
 
-const generateConfig = (userInput) => {
-  if (userInput.isShortVersion) {
-    return generateShortConfig(userInput);
-  }
+const generateConfig = userInput => userInput.isShortVersion ? generateShortConfig(userInput) : generateFullConfig(userInput);
 
-  return generateFullConfig(userInput);
-};
-
-const saveConfig = (config) => {
+const saveConfig = config => {
   const pathToConfig = path.join(process.cwd(), config.dst, 'chcp.json');
 
   return utils.writeFile(pathToConfig, config.config).then(_ => config);
 };
 
-const done = (config) => {
+const done = config => {
   console.log(`Generated new application\'s config in ${config.dst}:`);
   console.log(JSON.stringify(config.config, null, 2));
 };
 
-const execute = (context) => {
+const execute = context => {
   console.log('Initializing application\'s config');
 
   return utils.getInput(schema, context.argv)
-    .then(userInput => generateConfig(userInput))
-    .then(config => saveConfig(config))
-    .then(config => done(config));
+    .then(generateConfig)
+    .then(saveConfig)
+    .then(done);
 };
 
 export default execute;

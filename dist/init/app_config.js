@@ -137,10 +137,14 @@ var schema = {
   }
 };
 
+var generateReleaseNumber = function generateReleaseNumber() {
+  return Math.floor(new Date() / 1000);
+};
+
 var generateFullConfig = function generateFullConfig(input) {
   var config = {
     release: {
-      version: '',
+      version: generateReleaseNumber(),
       compare: input.releaseVersionsCompare,
       min_native_interface: input.minNativeInterface
     },
@@ -165,23 +169,17 @@ var generateFullConfig = function generateFullConfig(input) {
 };
 
 var generateShortConfig = function generateShortConfig(input) {
-  var config = {
-    release: '',
-    content: input.contentDir
-  };
-
   return {
-    config: config,
+    config: {
+      release: generateReleaseNumber(),
+      content: input.contentDir
+    },
     dst: input.pathToSourceDir
   };
 };
 
 var generateConfig = function generateConfig(userInput) {
-  if (userInput.isShortVersion) {
-    return generateShortConfig(userInput);
-  }
-
-  return generateFullConfig(userInput);
+  return userInput.isShortVersion ? generateShortConfig(userInput) : generateFullConfig(userInput);
 };
 
 var saveConfig = function saveConfig(config) {
@@ -200,13 +198,7 @@ var done = function done(config) {
 var execute = function execute(context) {
   console.log('Initializing application\'s config');
 
-  return _utils2.default.getInput(schema, context.argv).then(function (userInput) {
-    return generateConfig(userInput);
-  }).then(function (config) {
-    return saveConfig(config);
-  }).then(function (config) {
-    return done(config);
-  });
+  return _utils2.default.getInput(schema, context.argv).then(generateConfig).then(saveConfig).then(done);
 };
 
 exports.default = execute;

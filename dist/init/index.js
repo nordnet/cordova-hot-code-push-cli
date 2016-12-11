@@ -20,16 +20,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var execute = function execute(context) {
   var configType = context.argv._[1];
-  var executionResult = void 0;
   if (configType === 'amazon-config') {
     // TBD
   } else if (configType === 'ftp-config') {
     // TBD
   } else {
-    executionResult = (0, _app_config2.default)(context);
+    return (0, _app_config2.default)(context);
   }
-
-  return executionResult;
 };
 
 exports.default = execute;
