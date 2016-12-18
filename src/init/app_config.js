@@ -1,6 +1,7 @@
 import utils from '../utils';
 import path from 'path';
 import prompt from 'prompt';
+import R from 'ramda';
 
 const isShortVersion = {
   description: 'Would you like a short or full version?',
@@ -101,12 +102,10 @@ const schema = {
   }
 };
 
-const generateReleaseNumber = () => Math.floor(new Date() / 1000);
-
 const generateFullConfig = input => {
   const config = {
     release: {
-      version: generateReleaseNumber(),
+      version: utils.generateReleaseNumber(),
       compare: input.releaseVersionsCompare,
       min_native_interface: input.minNativeInterface
     },
@@ -133,7 +132,7 @@ const generateFullConfig = input => {
 const generateShortConfig = input => {
   return {
     config: {
-      release: generateReleaseNumber(),
+      release: utils.generateReleaseNumber(),
       content: input.contentDir
     },
     dst: input.pathToSourceDir
@@ -153,13 +152,17 @@ const done = config => {
   console.log(JSON.stringify(config.config, null, 2));
 };
 
+const requestUserInput = utils.getInput(schema);
+
 const execute = context => {
   console.log('Initializing application\'s config');
 
-  return utils.getInput(schema, context.argv)
-    .then(generateConfig)
-    .then(saveConfig)
-    .then(done);
+  return R.pipeP(
+    requestUserInput,
+    generateConfig,
+    saveConfig,
+    done
+  )(context.argv);
 };
 
 export default execute;

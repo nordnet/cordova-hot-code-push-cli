@@ -16,6 +16,10 @@ var _prompt = require('prompt');
 
 var _prompt2 = _interopRequireDefault(_prompt);
 
+var _ramda = require('ramda');
+
+var _ramda2 = _interopRequireDefault(_ramda);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var isShortVersion = {
@@ -137,14 +141,10 @@ var schema = {
   }
 };
 
-var generateReleaseNumber = function generateReleaseNumber() {
-  return Math.floor(new Date() / 1000);
-};
-
 var generateFullConfig = function generateFullConfig(input) {
   var config = {
     release: {
-      version: generateReleaseNumber(),
+      version: _utils2.default.generateReleaseNumber(),
       compare: input.releaseVersionsCompare,
       min_native_interface: input.minNativeInterface
     },
@@ -171,7 +171,7 @@ var generateFullConfig = function generateFullConfig(input) {
 var generateShortConfig = function generateShortConfig(input) {
   return {
     config: {
-      release: generateReleaseNumber(),
+      release: _utils2.default.generateReleaseNumber(),
       content: input.contentDir
     },
     dst: input.pathToSourceDir
@@ -195,10 +195,12 @@ var done = function done(config) {
   console.log(JSON.stringify(config.config, null, 2));
 };
 
+var requestUserInput = _utils2.default.getInput(schema);
+
 var execute = function execute(context) {
   console.log('Initializing application\'s config');
 
-  return _utils2.default.getInput(schema, context.argv).then(generateConfig).then(saveConfig).then(done);
+  return _ramda2.default.pipeP(requestUserInput, generateConfig, saveConfig, done)(context.argv);
 };
 
 exports.default = execute;

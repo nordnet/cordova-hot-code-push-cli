@@ -47,6 +47,7 @@
     "pify": "^2.3.0",
     "prompt": "^1.0.0",
     "q": "^1.4.1",
+    "ramda": "^0.22.1",
     "readdirp": "^2.0.0",
     "recursive-readdir": "^2.0.0",
     "s3-sync-aws": "^1.1.0",
