@@ -225,9 +225,32 @@ Entered credentials will be placed in the `.chcplogin` file:
 
 From this point you are ready to deploy your project on Amazon server.
 
-**Advise:** don't forget to put `.chcplogin` file in the ignore list of your version control system, if any is used. For git you can do this by executing:
+**Advice:** don't forget to put `.chcplogin` file in the ignore list of your version control system, if any is used. For git you can do this by executing:
 ```sh
 echo '.chcplogin' >> .gitignore
+```
+
+
+**Note:** Your Amazon user should have at least the following policy:
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "Stmt1488986623000",
+            "Effect": "Allow",
+            "Action": [
+                "s3:DeleteObject",
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:GetObjectAcl"
+            ],
+            "Resource": [
+                "arn:aws:s3:::{{ YOUR_S3_BUCKET }}/*"
+            ]
+        }
+    ]
+}
 ```
 
 #### Deploy command
