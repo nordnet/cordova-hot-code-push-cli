@@ -76,7 +76,8 @@
       acl: 'public-read',
       headers: {
         CacheControl: 'no-cache, no-store, must-revalidate',
-        Expires: 0
+        Expires: 0,
+        ContentEncoding: "gzip"
       },
       concurrency: 20
     }).on('data', function(file) {
