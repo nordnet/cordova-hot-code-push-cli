@@ -63,7 +63,8 @@
 
     var files = readdirp({
       root: context.sourceDirectory,
-      fileFilter: ignore
+      fileFilter: ignore,
+      directoryFilter: ignore
     });
 
     var uploader = s3sync({
@@ -75,7 +76,8 @@
       acl: 'public-read',
       headers: {
         CacheControl: 'no-cache, no-store, must-revalidate',
-        Expires: 0
+        Expires: 0,
+        ContentEncoding: "gzip"
       },
       concurrency: 20
     }).on('data', function(file) {
