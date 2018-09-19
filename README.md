@@ -1,3 +1,8 @@
+# THIS PROJECT IS DEPRECATED
+
+We are not using this repo anymore, and we lack the manpower and the experience needed to maintain it. We are aware of the inconveniece that this may cause you. Feel free to use it as is, or create your own fork. See https://github.com/nordnet/cordova-hot-code-push-cli/issues/79 for more information.
+
+
 # Cordova Hot Code Push Plugin CLI client
 
 This is a command line utility for [Cordova Hot Code Push Plugin](https://github.com/nordnet/cordova-hot-code-push). It will help you with development and deploy changes to your Cordova application via hot code push, without the need to submit your changes to the Apple App Store or Google Play.
